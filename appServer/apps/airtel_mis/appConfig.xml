@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appConfig>
+  <applicationType>web</applicationType>
+  <applicationTitle>Airtel MIS</applicationTitle>
+
+  <!-- <defaultConnectionString type="mssql" name="main">Data Source=.;initial Catalog=dms;user id=sa;pwd=sa1983</defaultConnectionString>-->
+  <appSettings>
+    <appSetting key="applicationTitle">DMS</appSetting>
+    <appSetting key="dateFormat">dd/MM/yyyy</appSetting>
+    <appSetting key="dateTimeFormat">dd/MM/yyyy HH:MM ss</appSetting>
+    <appSetting key="docPath">D:\current\project_data\dms.onboarding</appSetting>
+  </appSettings>
+
+  <packages>
+    <!--
+    <package assemblyName="bll.common.dll" />
+    <package assemblyName="bll.billingDemo.dll" />
+    -->
+  </packages>
+
+  <cruds>
+    <crud name="sysOrg" tableName="sysOrg" viewName="sysOrg" primaryKey="id" isIdentity="true" />
+  </cruds>
+
+  <requestData type="getData">
+
+    <dt name="sysOrg" type="view">
+      <view>sysOrg</view>
+    </dt>
+
+    <dt name="current_user_emp" type="other" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsCustomData" func="getCurrent_User_Employee"></dt>
+    
+  </requestData>
+
+  <requestData type="DropDown">
+    <dt name="department" type="sql">
+      <sql>select departmentName,id from mDepartment</sql>
+    </dt>
+  </requestData>
+
+  <requestData type="cmd">
+
+
+
+  </requestData>
+
+  <requestData type="sqlreport">
+  </requestData>
+
+  <requestData type="file">
+    <file name="doc" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsPDF" func="getPDF"></file>
+  </requestData>
+</appConfig>

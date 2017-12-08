@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appConfig>
+  <applicationType>web</applicationType>
+  <applicationTitle>DMS</applicationTitle>
+  <!-- <defaultConnectionString type="mssql" name="main">Data Source=.;initial Catalog=dms;user id=sa;pwd=sa1983</defaultConnectionString>-->
+
+  <appSettings>
+    <appSetting key="applicationTitle">DMS</appSetting>
+    <appSetting key="dateFormat">dd/MM/yyyy</appSetting>
+    <appSetting key="dateTimeFormat">dd/MM/yyyy HH:MM ss</appSetting>
+    <appSetting key="docPath">D:\current\project_data\dms</appSetting>
+
+  </appSettings>
+
+  <packages>
+    <!--<package assemblyName="bll.common.dll" />
+    <package assemblyName="bll.billingDemo.dll" />-->
+  </packages>
+  <cruds>
+    <crud name="sysOrg" tableName="sysOrg" viewName="sysOrg" primaryKey="id" isIdentity="true" />
+    <crud name="user" tableName="sysUser" viewName="sysUser" primaryKey="id" isIdentity="true" />
+    <crud name="department" tableName="mDepartment" viewName="vmDepartment" primaryKey="id" isIdentity="true" />
+    <crud name="docType" tableName="mDocType" viewName="mDocType" primaryKey="id" isIdentity="true" />
+    <crud name="mCustomForm" tableName="mCustomForm" viewName="mCustomForm" primaryKey="id" isIdentity="true" />
+    <crud name="mCustomFormFieldDetail" tableName="mCustomFormFieldDetail" viewName="vmCustomFormFieldDetail"  primaryKey="id" isIdentity="true" />
+    <crud name="mCustomFormMap" tableName="mCustomFormMap" viewName="vmCustomFormMap" primaryKey="id" isIdentity="true" />
+    <crud name="mFile" tableName="mFile" viewName="vmFile" primaryKey="id" isIdentity="true" />
+    <crud name="mFilePageContent" tableName="mFilePageContent" viewName="mFilePageContent" primaryKey="id" isIdentity="true" />
+    <crud name="mFileCustomFieldValue" tableName="mFileCustomFieldValue" viewName="mFileCustomFieldValue" primaryKey="id" isIdentity="true" />
+  </cruds>
+
+  <requestData type="getData">
+    <dt name="sysOrg" type="view">
+      <view>sysOrg</view>
+    </dt>
+    <dt name="user" type="view">
+      <view>sysUser</view>
+    </dt>
+    <dt name="project" type="view">
+      <view>mProject</view>
+    </dt>
+    <dt name="trInward" type="view">
+      <view>vtrInward</view>
+      <orderby>id desc</orderby>
+    </dt>
+    <dt name="department" type="view">
+      <view>vmDepartment</view>
+    </dt>
+    <dt name="docType" type="view">
+      <view>mDocType</view>
+    </dt>
+    <dt name="mCustomForm" type="view">
+      <view>mCustomForm</view>
+    </dt>
+    <dt name="mCustomFormFieldDetail" type="view">
+      <view>vmCustomFormFieldDetail</view>
+    </dt>
+    <dt name="mCustomFormMap" type="view">
+      <view>vmCustomFormMap</view>
+    </dt>
+    <dt name="mFile" type="view">
+      <view>vmFile</view>
+    </dt>
+    <dt name="mFile1" type="other" assemblyName="dms.bll" classPath="bll.hrdms.clsDocument" func="documentList" ></dt>
+    <dt name="syscolumns" type="view" >
+      <view>syscolumns</view>
+    </dt>
+    <dt name="mFile_FieldsDetail" type="other" assemblyName="dms.bll" classPath="bll.hrdms.clsEmployee_getCurrentEmployer" func="" ></dt>
+  </requestData>
+
+  <requestData type="DropDown">
+    <dt name="department" type="sql">
+      <sql>select departmentName,id from mDepartment</sql>
+    </dt>
+    <dt name="docType" type="sql">
+      <sql>select docType,id from mDocType</sql>
+    </dt>
+    <dt name="maxVoucherNo" type="sql">
+      <sql>select max(voucherNo) from trSale</sql>
+    </dt>
+    <dt name="mCustomForm" type="sql">
+      <sql>select formName,id from mCustomForm</sql>
+    </dt>
+    
+  </requestData>
+
+  <requestData type="cmd">
+
+    <cmd type="save" name="org\save" crudName="sysOrg">
+      <validations>
+        <validate type="basic" fieldName="organizationName" fieldTitle="Organization Name" maxLength="100" />
+        <validate type="unique" fieldName="organizationName" fieldTitle="Organization Name" primaryKey="id" tableName="sysOrg" />
+      </validations>
+    </cmd>
+    <cmd type="delete" name="org\delete" crudName="sysOrg" />
+
+    <cmd type="save" name="department\save" crudName="department">
+      <validations>
+        <validate type="basic" fieldName="departmentName" fieldTitle="Department Name" maxLength="100" />
+        <validate type="unique" fieldName="departmentName" fieldTitle="Department Name" primaryKey="id" tableName="mDepartment" />
+      </validations>
+    </cmd>
+    <cmd type="delete" name="department\delete" crudName="department" />
+
+    <cmd type="save" name="docType\save" crudName="docType">
+      <validations>
+        <validate type="basic" fieldName="docType" fieldTitle="Document Type" maxLength="100" />
+        <validate type="unique" fieldName="docType" fieldTitle="Document Type" primaryKey="id" tableName="mDocType" />
+      </validations>
+    </cmd>
+    <cmd type="delete" name="docType\delete" crudName="docType" />
+
+    <cmd type="save" name="mCustomForm\save" crudName="mCustomForm">
+      <validations>
+        <validate type="basic" fieldName="formName" fieldTitle="Form Name" maxLength="100" />
+        <validate type="unique" fieldName="formName" fieldTitle="Form Name" primaryKey="id" tableName="mCustomForm" />
+      </validations>
+    </cmd>
+    <cmd type="delete" name="mCustomForm\delete" crudName="mCustomForm" />
+
+
+    <cmd type="save" name="mCustomFormFieldDetail\save" crudName="mCustomFormFieldDetail">
+      <validations>
+        <validate type="basic" fieldName="fieldName" fieldTitle="Field Name" maxLength="100" />
+        <validate type="basic" fieldName="fieldTitle" fieldTitle="field Title" maxLength="100" />
+        <validate type="basic" fieldName="fieldType" fieldTitle="Field Type" maxLength="100" />
+      </validations>
+    </cmd>
+    <cmd type="delete" name="mCustomFormFieldDetail\delete" crudName="mCustomFormFieldDetail" />
+
+    <cmd type="save" name="mCustomFormMap\save" crudName="mCustomFormMap">
+      <validations>
+        <validate type="drp" fieldName="mDocTypeID" fieldTitle="Project Type"  />
+        <validate type="drp" fieldName="mDepartmentID" fieldTitle="Department"  />
+        <validate type="drp" fieldName="mCustomFormID" fieldTitle="Custom From"  />
+      </validations>
+    </cmd>
+    <cmd type="delete" name="mCustomFormMap\delete" crudName="mCustomFormMap" />
+
+    <cmd type="other" name="mFile\save2" assemblyName="dms.bll" classPath="dms.bll.clsDocumentUpload" func="uploadDoc" />
+    <cmd type="save" name="mFile\save" crudName="mFile">
+      <validations>
+        <validate type="drp" fieldName="mCustomFormMapID" fieldTitle="Custome Form Map"  />
+        <validate type="basic" fieldName="documentTitle" fieldTitle="Document Title" maxLength="100" />
+      </validations>
+    </cmd>
+    <cmd type="other" name="mFile\delete" assemblyName="dms.bll" classPath="dms.bll.clsDocumentUpload" func="deleteDoc" />
+    <cmd type="save" name="mFilePageContent\save" crudName="mFilePageContent"></cmd>
+
+    <cmd type="save" name="mFileCustomFieldValue\save" crudName="mFileCustomFieldValue">
+    </cmd>
+
+    <cmd type="other" name="user\save2" assemblyName="dms.bll" classPath="dms.bll.clsBussinessLogic" func="" ></cmd>
+    <cmd type="save" name="user\save" crudName="user">
+      <validations>
+        <validate type="basic" fieldName="name" fieldTitle="Name" maxLength="100" />
+        <validate type="unique" fieldName="name" fieldTitle="User Name" primaryKey="id" tableName="sysUser" />
+        <validate type="basic" fieldName="userid" fieldTitle="User ID" maxLength="50" />
+        <validate type="unique" fieldName="userid" fieldTitle="User ID" primaryKey="id" tableName="sysUser" />
+        <validate type="basic" fieldName="pwd" fieldTitle="Password" maxLength="50" />
+        <validate type="email" fieldName="email" fieldTitle="Email" maxLength="500" />
+      </validations>
+    </cmd>
+    <cmd type="delete" name="user\delete" crudName="user" />
+
+
+    <cmd type="other" name="test" assemblyName="dms.bll" classPath="dms.bll.clsDocumentUpload" func="uploadDoc" />
+
+    <cmd type="save" name="project\save" crudName="project">
+      <validations>
+        <validate type="basic" fieldName="ProjectName" fieldTitle="Project Name" maxLength="300" />
+        <validate type="unique" fieldName="ProjectName" fieldTitle="Project Name" primaryKey="id" tableName="mProject" />
+      </validations>
+    </cmd>
+    <cmd type="delete" name="project\delete" crudName="project" />
+
+    <cmd type="save" name="trInward\save" crudName="trInward">
+      <validations>
+        <validate type="basic" fieldName="awbNo" fieldTitle="Awb No" maxLength="100" />
+      </validations>
+    </cmd>
+    <cmd type="delete" name="trInward\delete" crudName="trInward" />
+
+    <cmd type="save" name="mDoc\save" crudName="mDoc">
+      <validations>
+        <validate type="basic" fieldName="FileBarCode" fieldTitle="File Bar Code" maxLength="200" />
+        <validate type="unique" fieldName="FileBarCode" fieldTitle="File Bar Code" primaryKey="id" tableName="mDoc" />
+        <validate type="email" fieldName="Email" fieldTitle="Email" maxLength="500" />
+      </validations>
+    </cmd>
+    <cmd type="delete" name="mDoc\delete" crudName="mDoc">
+    </cmd>
+    <cmd type="other" name="system\login" assemblyName="dms.bll" classPath="dms.bll.clsBussinessLogic" func="login">
+      <validations>
+        <validate type="basic" fieldName="userid" fieldTitle="User ID" maxLength="100" />
+        <validate type="basic" fieldName="pwd" fieldTitle="Password" maxLength="100" />
+      </validations>
+    </cmd>
+    <!--Accounts -->
+  </requestData>
+  <requestData type="sqlreport">
+    <sqlreport name="inwardlist" rdlPath="\sqlreport\inwardList.rdl">
+      <downloadName>inward list</downloadName>
+      <ds name="tbl" type="bll" path="trInward" />
+    </sqlreport>
+  </requestData>
+
+  <requestData type="file">
+    <file name="doc" assemblyName="dms.bll" classPath="dms.bll.clsPDF" func="getPDF"></file>
+  </requestData>
+</appConfig>

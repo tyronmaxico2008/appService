@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appConfig>
+  <applicationType>web</applicationType>
+  <applicationTitle>DMS Onboarding</applicationTitle>
+
+  <!-- <defaultConnectionString type="mssql" name="main">Data Source=.;initial Catalog=dms;user id=sa;pwd=sa1983</defaultConnectionString>-->
+  <appSettings>
+    <appSetting key="applicationTitle">DMS</appSetting>
+    <appSetting key="dateFormat">dd/MM/yyyy</appSetting>
+    <appSetting key="dateTimeFormat">dd/MM/yyyy HH:MM ss</appSetting>
+    <appSetting key="docPath">D:\current\project_data\dms.onboarding</appSetting>
+  </appSettings>
+
+  <packages>
+    <!--
+    <package assemblyName="bll.common.dll" />
+    <package assemblyName="bll.billingDemo.dll" />
+    -->
+  </packages>
+
+  <cruds>
+    <crud name="sysOrg" tableName="sysOrg" viewName="sysOrg" primaryKey="id" isIdentity="true" />
+    <crud name="sysForm" tableName="sysForm" viewName="sysForm" primaryKey="id" isIdentity="true" />
+    <crud name="sysFormFields" tableName="sysFormFields" viewName="sysFormFields" primaryKey="id" isIdentity="true" />
+    <crud name="mEmployee" tableName="mEmployee" viewName="mEmployee" primaryKey="id" isIdentity="true" />
+    <crud name="mEmployee_Forms" tableName="mEmployee_Forms" viewName="vmEmployee_Forms" primaryKey="id" isIdentity="true" />
+    <crud name="mEmployee_FormFields" tableName="mEmployee_FormFields" viewName="vmEmployee_FormFields" primaryKey="id" isIdentity="true" />
+    <crud name="sysUploadCSV_log" tableName="sysUploadCSV_log" viewName="sysUploadCSV_log" primaryKey="id" isIdentity="true" />
+    <crud name="mLocation" tableName="mLocation" viewName="mLocation" primaryKey="id" isIdentity="true" />
+  </cruds>
+
+  <requestData type="getData">
+
+    <dt name="sysOrg" type="view">
+      <view>sysOrg</view>
+    </dt>
+
+    <dt name="sysForm" type="view">
+      <view>sysForm</view>
+    </dt>
+
+    <dt name="sysFormFields" type="view">
+      <view>sysFormFields</view>
+    </dt>
+
+    <dt name="mEmployee" type="view">
+      <view>mEmployee</view>
+    </dt>
+
+    <dt name="mEmployee_Forms" type="view">
+      <view>vmEmployee_Forms</view>
+    </dt>
+
+    <dt name="mEmployee_Forms_for_Candidate" type="other" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsCustomData"  func="get_vmEmployee_Forms_For_Candidate" ></dt>
+
+    <dt name="mEmployee_FormFields" type="view">
+      <view>vmEmployee_FormFields</view>
+      <orderby>field_index</orderby>
+    </dt>
+    <dt name="mLocation" type="view">
+      <view>mLocation</view>
+    </dt>
+    <dt name="current_user" type="other" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsCustomData" func="getCurrent_User"></dt>
+    <dt name="current_user_emp" type="other" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsCustomData" func="getCurrent_User_Employee"></dt>
+
+  </requestData>
+
+  <requestData type="DropDown">
+    <dt name="department" type="sql">
+      <sql>select departmentName,id from mDepartment</sql>
+    </dt>
+
+    <dt name="location" type="sql">
+      <sql>select locationName,id from mLocation</sql>
+    </dt>
+    
+  </requestData>
+
+  <requestData type="cmd">
+    <cmd type="save" name="mEmployee\save2" crudName="mEmployee">
+      <validations>
+        <validate type="basic" fieldName="first_name" fieldTitle="First Name" maxLength="100" />
+        <validate type="basic" fieldName="last_name" fieldTitle="Last Name" maxLength="100" />
+        <validate type="unique" fieldName="email" fieldTitle="Email" primaryKey="id" tableName="mEmployee" />
+      </validations>
+    </cmd>
+
+    <cmd type="save" name="mLocation\save" crudName="mLocation">
+      <validations>
+        <validate type="basic" fieldName="locationName" fieldTitle="Location Name" maxLength="100" />
+        <validate type="unique" fieldName="locationName" fieldTitle="location Name" primaryKey="id" tableName="mLocation" />
+      </validations>
+    </cmd>
+    <cmd type="delete" name="mLocation\delete" crudName="mLocation" />
+
+    <cmd type="other" name="mEmployee\upload_csv" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsBussinessLogic" func="upload_csv" />
+    <cmd type="other" name="mEmployee\upload_doc" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsBussinessLogic" func="upload_doc" />
+    <cmd type="other" name="candidate_login" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsBussinessLogic" func="candidate_login" />
+    <cmd type="other" name="admin_login" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsBussinessLogic" func="admin_login" />
+    <cmd type="other" name="mEmployee\finish" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsBussinessLogic" func="employee_finish" />
+    <cmd type="other" name="mEmployee\updateFieldValue" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsBussinessLogic" func="employee_field_updateValue" />
+  </requestData>
+
+  <requestData type="sqlreport">
+    <sqlreport name="report1" rdlPath="\sqlReport\EmployeeListByStatus.rdl">
+      <downloadName>Employee Upload Report</downloadName>
+      <!-- <ds name="Employee" type="sql">select * from tbl_HireempInformation where Njoin_id = @Njoin_id</ds> -->
+      <ds name="DataSet1" type="sql">select * from vmEmployee_FormFields</ds>
+    </sqlreport>
+
+  </requestData>
+
+  <requestData type="file">
+    <file name="doc" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsPDF" func="getPDF"></file>
+  </requestData>
+</appConfig>

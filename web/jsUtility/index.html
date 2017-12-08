@@ -1,0 +1,59 @@
+<<<<<<< HEAD
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+
+        <title>Application  ng test</title>
+        <link href="miniassets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="miniassets/bootstrap/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        
+        <script src="miniassets/jquery-1.11.0.min.js"></script>
+        
+        
+        <script src="miniassets/bootstrap/js/bootstrap.min.js"></script>
+        <script src="miniassets/angular.min.1.6.js"></script>
+        <script src="build/ngBll.js"></script>
+        <script src="ngTest/ngTest.js"></script>        
+    </head>
+    <body ng-app="myApp" ng-controller="CustomerList">
+        <grd-filter grd="grd"></grd-filter>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Customer Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="r in grd.rows">
+                    <td>
+                        <span ng-bind="r.customerName"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <pager grd="grd" />
+=======
+<html>
+    <head>
+        <title>Ajax Upload</title>
+        <script src="common/myAjax.js"></script>
+        <script>
+            function test(){
+                clsMyAjax();    
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Ajax upload with progress : </h1>        
+        <input type="file" id="txtFile" />
+        <br />
+        <p><span id="lblResult">0 %</span></p>
+        <button onclick="test_myAjax()">Upload</button>
+>>>>>>> b871b116f5c6230e1779bb4602dec3700d60d201
+    </body>
+</html>

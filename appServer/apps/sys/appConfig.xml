@@ -1,0 +1,123 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<appConfig>
+  <applicationType>web</applicationType>
+  <applicationTitle>MLM</applicationTitle>
+  <!-- <defaultConnectionString type="mssql" name="main">Data Source=.\sql2;initial Catalog=ap_mlm;user id=sa;pwd=sa1983</defaultConnectionString> -->
+  <appSettings>
+    <appSetting key="applicationTitle">MLM</appSetting>
+    <appSetting key="dateFormat">dd/MM/yyyy</appSetting>
+    <appSetting key="dateTimeFormat">dd/MM/yyyy HH:MM ss</appSetting>
+  </appSettings>
+
+  <packages>
+    <!--<package assemblyName="bll.common.dll"  />
+    <package assemblyName="bll.billingDemo.dll" />-->
+  </packages>
+
+  <cruds>
+    <crud name="sysUser" tableName="sysUser" viewName="   sysUser" primaryKey="id" isIdentity="true" />
+    <crud name="sysModules" tableName="sysModules" viewName="sysModules" primaryKey="id" isIdentity="true" />
+    <crud name="sysModuleOperations" tableName="sysModuleOperations" viewName="sysModuleOperations" primaryKey="id" isIdentity="true" />
+    <crud name="sysRole" tableName="sysRole" viewName="sysRole" primaryKey="id" isIdentity="true" />
+    <crud name="sysOrg" tableName="sysOrg" viewName="sysOrg" primaryKey="id" isIdentity="true" />
+    <crud name="sysWorkflowTrigger" tableName="sysWorkflowTrigger" viewName="sysWorkflowTrigger" primaryKey="id" isIdentity="true" />
+  </cruds>
+
+  <requestData type="getData">
+    <dt name="sysOrg" type="view">
+      <view>sysOrg</view>
+    </dt>
+    <dt name="sysRole" type="view">
+      <view>sysRole</view>
+    </dt>
+    <dt name="sysUser" type="view">
+      <view>sysUser</view>
+    </dt>
+    <dt name="roleModuleList">
+      <view></view>
+    </dt>
+    <dt name="modules" type="view">
+      <view>sysModules</view>
+    </dt>
+    <dt name="sysModuleOperations" type="view">
+      <view>sysModuleOperations</view>
+    </dt>
+    <dt name="sysWorkflowTrigger" type="view">
+      <view>sysWorkflowTrigger</view>
+    </dt>
+    <dt name="fieldInfo" type="view">
+      <view>sysFieldInfo_detail</view>
+    </dt>
+    <dt name="sysModuleOperations\selected" type="other" assemblyName="sys.bll" classPath="sys.bll.clsCustomData" func="getRoleModuleActions"></dt>
+  </requestData>
+
+  <requestData type="DropDown">
+    <dt name="role" type="sql">
+      <sql>select roleName,id from sysRole</sql>
+    </dt>
+  </requestData>
+
+  <requestData type="cmd">
+    <cmd type="other" name="system\login"  assemblyName="mlm.ui" classPath="mlm.bll.clsBussinessLogic" func="login" />
+    <cmd type="save" name="sysUser\save" crudName="sysUser">
+      <validations>
+        <validate type="basic" fieldName="name" fieldTitle="Name" maxLength="100" />
+        <validate type="unique" fieldName="name" fieldTitle="User Name" primaryKey="id" tableName="sysUser" />
+        <validate type="basic" fieldName="userid" fieldTitle="User ID" maxLength="50" />
+        <validate type="unique" fieldName="userid" fieldTitle="User ID" primaryKey="id" tableName="sysUser" />
+        <validate type="basic" fieldName="pwd" fieldTitle="Password" maxLength="50" />
+        <validate type="email" fieldName="email" fieldTitle="Email"  required="true" maxLength="500" />
+        <validate type="drp" fieldName="sysRoleID" fieldTitle="Role" />
+      </validations>
+    </cmd>
+    <cmd type="delete" name="sysUser\delete" crudName="sysUser" />
+
+    <cmd type="save" name="modules\save" crudName="sysModules">
+      <validations>
+        <validate type="basic" fieldName="module_name" fieldTitle="Module Name" maxLength="100" />
+        <validate type="unique" fieldName="module_name" fieldTitle="Module Name" primaryKey="id" tableName="sysModules" />
+
+        <validate type="basic" fieldName="module_code" fieldTitle="Module Code" maxLength="100" />
+        <validate type="unique" fieldName="module_code" fieldTitle="Module Code" primaryKey="id" tableName="sysModules" />
+      </validations>
+    </cmd>
+    <cmd type="delete" name="modules\delete" crudName="sysModules" />
+
+    <cmd type="save" name="sysModuleOperations\save" crudName="sysModuleOperations">
+      <validations>
+        <validate type="basic" fieldName="OperationName" fieldTitle="Operation Name" maxLength="50" />
+        <validate type="basic" fieldName="OperationCode" fieldTitle="Operation Code" maxLength="50" />
+        <validate type="drp" fieldName="sysModulesID" fieldTitle="sysModulesID" />
+      </validations>
+    </cmd>
+    <cmd type="delete" name="sysModuleOperations\delete" crudName="sysModuleOperations" />
+
+    <cmd type="save" name="sysRole\save" crudName="sysRole"  >
+      <validations>
+        <validate type="basic" fieldName="roleName" fieldTitle="Role Name" maxLength="50" />
+        <validate type="unique" fieldName="roleName" fieldTitle="Role Name" primaryKey="id" tableName="sysRole" />
+      </validations>
+    </cmd>
+    <cmd type="delete" name="sysRole\delete" crudName="sysRole"  />
+
+    <cmd type="other" name="sysRoleModuleOperation\save"  assemblyName="dms.bll" classPath="sys.bll.clsCustomCommand"  func="save_roleModuleOperation"  />
+
+
+    <cmd type="delete" name="sysWorkflowTrigger\delete" crudName="sysWorkflowTrigger"  />
+    <cmd type="save" name="sysWorkflowTrigger\save" crudName="sysWorkflowTrigger" >
+      <validations>
+        <validate type="basic" fieldName="trigger_name" fieldTitle="Trigger Name " maxLength="100"/>
+        <validate type="basic" fieldName="trigger_type" fieldTitle="Trigger Type" maxLength="100"/>
+        <validate type="check" fieldName="trigger_type" fieldTitle="Trigger Type" values="Email,Unknown" />
+        <!--<validate type="basic" fieldName="date_field" fieldTitle="Date Field" maxLength="100"/>-->
+        <validate type="check" fieldName="date_execution_type" fieldTitle="Date Execution type" values="After,Before,On" maxLength="100"/>
+        <validate type="numeric" fieldName="statusIndex" fieldTitle="Status Index" />
+      </validations>
+    </cmd>
+
+  </requestData>
+
+  <requestData type="sqlreport">
+  </requestData>
+  
+</appConfig>
