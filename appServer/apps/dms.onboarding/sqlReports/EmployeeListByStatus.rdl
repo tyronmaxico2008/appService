@@ -411,7 +411,8 @@ FROM
                   </Group>
                   <SortExpressions>
                     <SortExpression>
-                      <Value>=Fields!formName.Value</Value>
+                      <Value>=Fields!field_index.Value</Value>
+                      <Direction>Descending</Direction>
                     </SortExpression>
                   </SortExpressions>
                   <TablixHeader>
@@ -621,7 +622,7 @@ FROM
         <DataSetName>DataSet1</DataSetName>
         <Top>0.9525mm</Top>
         <Left>0.9525mm</Left>
-        <Height>23.99998mm</Height>
+        <Height>23.99995mm</Height>
         <Width>81.48549mm</Width>
         <Style>
           <Border>
@@ -650,7 +651,7 @@ FROM
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>24.95247mm</Height>
+    <Height>24.95248mm</Height>
     <Style>
       <Border>
         <Style>None</Style>

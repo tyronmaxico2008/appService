@@ -1,0 +1,28 @@
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<appConfig>
+   <defaultConnectionString type="mssql" name="main">Data Source=SQL7002.site4now.net;Initial Catalog=DB_A2E50D_mailroom;User Id=DB_A2E50D_mailroom_admin;Password=2november;</defaultConnectionString>
+	<appSettings>
+		<appSetting key="firstName">Amit</appSetting>
+		<appSetting key="lastName">Jha</appSetting>
+		<appSetting key="docPath">D:\current\project_data\dms</appSetting>
+	</appSettings>
+
+	<cruds>
+		<crud name="amit" tableName="sysUser" viewName="sysUser" primaryKey="id" isIdentity="true" />
+	</cruds>
+	
+	<requestData type="getData">
+		<dt name="amit" type="view">
+		  <view>sysUser</view>
+		</dt>
+		<dt name="mCustomer" type="view">
+			<view>vmCustomer</view>
+			<orderby>id desc</orderby>
+		</dt>
+	</requestData>
+
+  <packages>
+    <!--<package assemblyName="bll.common.dll" />
+    <package assemblyName="bll.billingDemo.dll" />-->
+  </packages>
+</appConfig>

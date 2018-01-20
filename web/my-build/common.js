@@ -38,9 +38,6 @@ var g = {
 (function ($) {
     $.fn.serializeAny = function () {
         var ret = [];
-
-
-
         $.each($(this).find(':input'), function () {
 
             if (this.name != "") {
@@ -52,33 +49,14 @@ var g = {
         });
 
         return ret;
-    };
-
-    $.fn.validateFileSize = function (iSizeInMB) {
-        var blnValidate = true;
-        $.each(this, function () {
-            if (blnValidate == false) return;
-            if ($(this).attr("type") == "file" && this.files.length > 0) {
-                var sizeInMB = this.files[0].size / 1024 / 1024;
-
-
-                if (sizeInMB > iSizeInMB) {
-                    blnValidate = false;
-                    alert("The size of file [" + this.files[0].name + "] is " + sizeInMB.toFixed(2) + " MB, should not exceed more than " + Math.round(iSizeInMB) + " MB");
-                }
-            }
-        });
-        return blnValidate;
-    };
-
+    }
 })(jQuery);
 
 
 function postJn(sender) {
     var jn = [];
 
-    var f = {
-        name: ""
+    var f = { name: ""
         , value: ""
     };
 
@@ -86,7 +64,7 @@ function postJn(sender) {
     f.value = $(sender).val();
 
     jn.push(f);
-
+    
     return jn;
 
 }

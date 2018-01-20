@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appConfig>
   <applicationType>web</applicationType>
-  <applicationTitle>DMS</applicationTitle>
+  <applicationTitle>DMS1</applicationTitle>
   <!-- <defaultConnectionString type="mssql" name="main">Data Source=.;initial Catalog=dms;user id=sa;pwd=sa1983</defaultConnectionString>-->
 
   <appSettings>
@@ -24,6 +24,7 @@
     <crud name="mCustomForm" tableName="mCustomForm" viewName="mCustomForm" primaryKey="id" isIdentity="true" />
     <crud name="mCustomFormFieldDetail" tableName="mCustomFormFieldDetail" viewName="vmCustomFormFieldDetail"  primaryKey="id" isIdentity="true" />
     <crud name="mCustomFormMap" tableName="mCustomFormMap" viewName="vmCustomFormMap" primaryKey="id" isIdentity="true" />
+    <crud name="mFolder" tableName="mFolder" viewName="mFolder" primaryKey="id" isIdentity="true" />
     <crud name="mFile" tableName="mFile" viewName="vmFile" primaryKey="id" isIdentity="true" />
     <crud name="mFilePageContent" tableName="mFilePageContent" viewName="mFilePageContent" primaryKey="id" isIdentity="true" />
     <crud name="mFileCustomFieldValue" tableName="mFileCustomFieldValue" viewName="mFileCustomFieldValue" primaryKey="id" isIdentity="true" />
@@ -61,7 +62,9 @@
     <dt name="mFile" type="view">
       <view>vmFile</view>
     </dt>
-    <dt name="mFile1" type="other" assemblyName="dms.bll" classPath="bll.hrdms.clsDocument" func="documentList" ></dt>
+    <dt name="mFile1" type="other" assemblyName="dms.bll" classPath="dms.bll.clsDocumentSearch" func="documentList_forFolder" ></dt>
+    <dt name="treeData" type="other" assemblyName="dms.bll" classPath="dms.bll.clsGetData" func="getTreeData" ></dt>
+    
     <dt name="syscolumns" type="view" >
       <view>syscolumns</view>
     </dt>
@@ -81,7 +84,7 @@
     <dt name="mCustomForm" type="sql">
       <sql>select formName,id from mCustomForm</sql>
     </dt>
-    
+
   </requestData>
 
   <requestData type="cmd">
@@ -137,6 +140,10 @@
     </cmd>
     <cmd type="delete" name="mCustomFormMap\delete" crudName="mCustomFormMap" />
 
+    <cmd type="save" name="mFolder\save" crudName="mFolder" />
+    <cmd type="other" name="mFolder\paste" assemblyName="dms.bll" classPath="dms.bll.clsFolderStructure" func="cutPaste" />
+
+    <cmd type="other" name="mFile\simpleUpload" assemblyName="dms.bll" classPath="dms.bll.clsDocumentUpload" func="simpleUpload" />
     <cmd type="other" name="mFile\save2" assemblyName="dms.bll" classPath="dms.bll.clsDocumentUpload" func="uploadDoc" />
     <cmd type="save" name="mFile\save" crudName="mFile">
       <validations>

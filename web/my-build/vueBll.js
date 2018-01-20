@@ -1,4 +1,5 @@
 ///amit jha
+
 function clsAjaxProcessing(e) {
 
     var btn = undefined;
@@ -38,9 +39,6 @@ var g = {
 (function ($) {
     $.fn.serializeAny = function () {
         var ret = [];
-
-
-
         $.each($(this).find(':input'), function () {
 
             if (this.name != "") {
@@ -52,33 +50,14 @@ var g = {
         });
 
         return ret;
-    };
-
-    $.fn.validateFileSize = function (iSizeInMB) {
-        var blnValidate = true;
-        $.each(this, function () {
-            if (blnValidate == false) return;
-            if ($(this).attr("type") == "file" && this.files.length > 0) {
-                var sizeInMB = this.files[0].size / 1024 / 1024;
-
-
-                if (sizeInMB > iSizeInMB) {
-                    blnValidate = false;
-                    alert("The size of file [" + this.files[0].name + "] is " + sizeInMB.toFixed(2) + " MB, should not exceed more than " + Math.round(iSizeInMB) + " MB");
-                }
-            }
-        });
-        return blnValidate;
-    };
-
+    }
 })(jQuery);
 
 
 function postJn(sender) {
     var jn = [];
 
-    var f = {
-        name: ""
+    var f = { name: ""
         , value: ""
     };
 
@@ -86,7 +65,7 @@ function postJn(sender) {
     f.value = $(sender).val();
 
     jn.push(f);
-
+    
     return jn;
 
 }
@@ -158,157 +137,20 @@ function clsMyAjax(sUrl) {
     }
     
 }
-
-var appName = "ap_mlm"
-
-//var slinkGet = "http://localhost/web_test/Service/
-//var slinkControlView = "http://localhost/assets/admin/vueUtility/controlViews/"
-//var slinkSQLReport = "http://localhost/web_test/Service/setReport?appName=" + appName + "&path=";
-//var slinkSQLReportDownload = "http://localhost/web_test/Service/downloadSQLReport";
-
-function clsConfig() {
-
-    this.appName = "ap_mlm";
-    this.serviceLink =  "http://localhost/web_test/Service/";
-    this.controlViewLink = "http://localhost/assets/admin/vueUtility/controlViews/";
-    
-    this.getDataLink = function(sPath ) { 
-        return this.serviceLink + "getdataPaging?appName=" + appName + "&path=" + sPath ; 
-    }
-
-    this.getUpdateLink = function (sPath) {
-        return this.serviceLink + "UpdateModule?appName=" + this.appName + "&path=" + sPath;
-    }
-
-    this.getControlViewLink = function(sPath) {
-        return this.controlViewLink + sPath
-    }
-    
-    this.getSQLReportLink = function(sPath){
-        return this.serviceLink + "setReport?appName=" + appName + "&path=" + sPath;
-    }
-    
-    this.getSQLReportDownloadLink = function(sPath,sFileType){
-        return this.serviceLink + "downloadSQLReport?filetype=" + sFileType;
-    }
-    
-    this.getDataPagingLink = function(sPath,iPageIndex,iPageSize){
-
-        var sLink =  this.serviceLink+ "getdataPaging?appName=" + appName + "&path=" + sPath;
-        var iRecordStart = iPageIndex * iPageSize;
-        
-        sLink += "&start=" + iRecordStart + "&length=" + iPageSize;
-        
-        return sLink;
-    }
-    
-    
-    this.submitForm = function(sUrl,jnPost,callBack){
-        $.post(sUrl,jnPost,function(data,status){
-            if(status == "success"){
-                callBack(data,"success");
-            }
-        });
-        
-    }
-    
-    
-    this.getDataPaging = function(sPath
-    , jnPostData
-    , iPageIndex
-    , iPageSize
-    , callBack){
-
-        debugger;
-        var sLink = this.getDataPagingLink(sPath,iPageIndex,iPageSize);
-
-        this.submitForm(sLink,jnPostData,function(data,status){
-            if(status == "success"){
-                callBack(data,"success");
-            }
-        });
-    }
-
-    this.UpdateModule =  function ( sPath, jnData, func, e) {
-        debugger;
-        var url = this.getUpdateLink(sPath);
-        var oAjaxProcess = new clsAjaxProcessing(e);
-
-        oAjaxProcess.start();
-
-        this.submitForm(url, jnData,function (data) {
-            var response = data['msg'];
-            var data1 = data['data'];
-
-            if (response != "") {
-                alert("Opps! "+ response);
-                if ($.isFunction(func)) func("error");
-            }
-            else {
-                //ShowMessage("success!", response);
-                if ($.isFunction(func)) func("success", data1);
-            }
-            oAjaxProcess.end();
-        });
-    }
-
-    
-    this.setSQLReport = function(sPath, jnData, func , e) {
-        //var url = appConfig.getReportLink(sPath);
-        var oAjaxProcess = new clsAjaxProcessing(e);
-
-        oAjaxProcess.start();
-        var sUrl = this.getSQLReportLink(sPath);
-
-        $.post(sUrl,jnData,function (data) {
-            var response = data['msg'];
-            var data1 = data['data'];
-
-             if (response != "") {
-                 alert(response);
-                 if ($.isFunction(func)) func("error");
-             }
-             else {
-                 //ShowMessage("success!", response);
-                 if ($.isFunction(func)) func("success", data1);
-             }
-            oAjaxProcess.end();
-        });
-    }
-    
-    
-
-    this.downloadSQLReport = function (sPath,sFileType,jnData,e){
-        var self = this;
-        
-        this.setSQLReport(sPath, jnData, function (status) {
-            if(status=="success")
-                window.location =  self.getSQLReportDownloadLink(sPath,sFileType);
-        }, e);
-        
-    }
-}
-
-var oConfig = new clsConfig();
-
-
+var appConfig = new clsAppConfig();
 
 var arrVueControls = [];
 
-/*
-var getDataPaging = oConfig.getDataPaging;
-
-var setSQLReport  = oConfig.setSQLReport;
-
-var  downloadSQLReport = oConfig.downloadSQLReport
-*/
-
 function getControlViewHtml(sUrl,callBack){
-    _link = oConfig.getControlViewLink(sUrl);
+    
+    _link = appConfig.viewLink + sUrl;
+    
     $.get(_link,function(response,status){
         callBack(response,status);
     })
 }
+
+
 
 function clsVueControl(sName,sVirtualUrl,fn){
     
@@ -334,58 +176,584 @@ function addVueControl(sName,sUrl,fn){
 }
 
 function registerVueControls() {
-    for(var i =0; i < arrVueControls.length;i++){
+        for(var i =0; i < arrVueControls.length;i++){
         arrVueControls[i].register();
     }
 }
 
-/*
-var dbType = "mssql";
 
-function postData(row) {
-	jnPost  = {}
-	
-	for(var sField in row)
-	{
-	}
+function clsAppConfig() {
+    
+    this.appName = "";
+    this.controllerLink = "";
+    this.assetsLink = "";
+    this.viewLink = "";
+    this.appResourceLink  = "";
+    this.getDataLink = function (sPath) {
+        return this.controllerLink + "getdataAll?appName=" + this.appName + "&path=" + sPath;
+    }
+
+    this.getDataPagingLink = function (sPath
+        , pageSize
+        , length
+        , start) {
+
+        var sLink = this.controllerLink + "getdataPaging?appName=" + this.appName + "&path=" + sPath;
+        sLink += "&draw=" + pageSize;
+        sLink += "&length=" + length;
+        sLink += "&start=" + start;
+        return sLink;
+    }
+
+    this.getUpdateLink = function (sPath) {
+        return this.controllerLink + "UpdateModule?appName=" + this.appName + "&path=" + sPath;
+    }
+    
+    this.getReportLink = function (sPath) {
+        return this.controllerLink + "setReport?appName=" + this.appName + "&path=" + sPath;        
+    }    
+
+    this.getReportDownloadLink = function () {
+        return this.controllerLink + "downloadSQLReport";
+    }
+};
+
+function clsRequest($http,appConfig) {
+
+    this.getData = function (sPath, callBack) {
+        var sPathFull = appConfig.getDataLink(sPath);
+
+        if($http)
+        {
+            $http.get(sPathFull).success(function (data, status) {
+                callBack(data.Obj)
+            }).error(function (data, status) {
+
+            });
+        }
+    };    
+    
+    this.submitForm =  function ( fields, uploadUrl, callback) {
+
+        var fd = new FormData();
+        
+        for (var f in fields) {
+            if (fields[f] != null && fields[f] != undefined)
+                fd.append(f, fields[f]);
+        }
+        
+        ///////////////////////////////////
+        
+        if($http)
+        {
+            
+            var _fnSuccess = function(res){
+                if (callback != undefined) callback(res.data,"success");
+            };
+            
+            var _fnError = function(){
+                if (callback != undefined) callback(null,"error");
+            };
+        
+            $http.post(uploadUrl, fd, {
+                transformRequest: angular.identity,
+                headers: { 'Content-Type': undefined }
+            }).then(_fnSuccess,_fnError);
+        }
+        else    
+        {
+            /*
+            $.post(uploadUrl,fields,function(data,status){
+                if(status == "success") 
+                    callback(data,"success");
+                else 
+                    callback(null,"error");
+            });
+            */
+            
+            request  = $.ajax({
+                url: uploadUrl,
+                contentType: false,
+                data: fd,
+                processData : false,
+                type: 'POST'
+            });
+
+            request.done(function(data){
+                callback(data,"success");
+            });
+
+            request.fail(function(error){
+                callback(null,"error");
+            });
+        }
+    };
+    
+    
+    this.execJson = function (sPath, jnData, func,e) {
+        var oAjaxProcess = new clsAjaxProcessing(e);
+        oAjaxProcess.start();
+
+        var _url = appConfig.getDataLink(sPath);
+
+        this.submitForm(jnData,_url,function (data){
+            func(data)
+            oAjaxProcess.end();
+        });
+    }
+    
+    this.execGrid = function (sPath, pageSize, start, length, jnData, func, e) {
+        
+        
+        var oAjaxProcess = new clsAjaxProcessing(e);
+        oAjaxProcess.start();
+
+        var _url = appConfig.getDataPagingLink(sPath, pageSize, length, start);
+
+        this.submitForm(jnData,_url,function (data){
+            func(data);
+            oAjaxProcess.end();
+        });
+    }
+
+     this.setSQLReport = function (sPath, jnData, func, e) {
+         var url = appConfig.getReportLink(sPath);
+         var oAjaxProcess = new clsAjaxProcessing(e);
+         
+         oAjaxProcess.start();
+         this.submitForm(jnData, url, function (data) {
+             var response = data['msg'];
+             var data1 = data['data'];
+             
+             if (response != "") {
+                 alert(response);
+                 if ($.isFunction(func)) func("error");
+             }
+             else {
+                 //ShowMessage("success!", response);
+                 if ($.isFunction(func)) func("success", data1);
+             }
+             
+             oAjaxProcess.end();
+         });
+     }
+    
+     this.downloadSQLReport = function(sPath,sFileType,jnData,e){
+         this.setSQLReport( sPath, jnData, function (status) {
+            if(status=="success")
+                window.location = appConfig.getReportDownloadLink() + "?filetype=" + sFileType;
+        }, e);    
+     }
+     
+     this.UpdateModule =  function ( sPath, jnData, func, e) {
+            
+        var url = appConfig.getUpdateLink(sPath);
+        var oAjaxProcess = new clsAjaxProcessing(e);
+
+        oAjaxProcess.start();
+
+        this.submitForm( jnData, url, function (data) {
+            var response = data['msg'];
+            var data1 = data['data'];
+
+            if (response != "") {
+                alert("Opps! "+ response);
+                if ($.isFunction(func)) func("error");
+            }
+            else {
+                //ShowMessage("success!", response);
+                if ($.isFunction(func)) func("success", data1);
+            }
+            oAjaxProcess.end();
+        });
+    }
+     
+    this.UpdateModule2 =  function ( sPath, jnData, func, e) {
+            
+        var url = appConfig.getUpdateLink(sPath);
+        var oAjaxProcess = new clsAjaxProcessing(e);
+
+        oAjaxProcess.start();
+
+        this.submitForm( jnData, url, function (data) {
+            var response = data['msg'];
+            var data1 = data['data'];
+
+            if (response != "") {
+                //alert("Opps! "+ response);
+                if ($.isFunction(func)) func("error",response);
+            }
+            else {
+                //ShowMessage("success!", response);
+                if ($.isFunction(func)) func("success", data1);
+            }
+            oAjaxProcess.end();
+        });
+    }
+
+
 }
-*/
 
-function clsGrid (sPathGet,sPathSave,sPathDelete,sID) {
+function ngGrid(bll, sGetPath) {
 
-    //CRUD Config
-    this.primaryKeyField =  (sID || "id");
-    this.getPath = sPathGet;
-    this.savePath = sPathSave;
-    this.deletePath = sPathDelete;
-    //CRUD 	
+    var grid = this;
+
+    grid.getPath = sGetPath;
+
+    //Ajax loader
+    grid.beforeLoad = [];
+    grid.afterLoad = [];
+    grid.postJson = [];
+    grid.busy = false;
+    grid.selectAll = false;
     
-    this.filterData = { }
-    this.row = {}
-    this.rows  = []
+    grid.isError = false;
+    grid.errorMessage = "";
     
-    this.count = 0
-    this.pageIndex = 0
-    this.pageSize = 5
-    this.busy = false
-    this.isError = false
-    this.errorMessage = ""
+    grid.setSubModule = function (val) {
+        subModuleName = val;
+    }
+
+    grid.addBeforeLoad = function (fn) {
+        grid.beforeLoad.push(fn);
+    }
+
+    grid.addAfterLoad = function (fn) {
+        grid.afterLoad.push(fn);
+    }
+    
+
+    grid.addPostJson = function (fn) {
+        grid.postJson.push(fn);
+    }
+
+    var _beforeLoad = function () {
+        $.each(grid.beforeLoad, function () {
+            if ($.isFunction(this)) this();
+        });
+    }
+
+    var _afterLoad = function () {
+        $.each(grid.afterLoad, function () {
+            if ($.isFunction(this)) this();
+        });
+    }
+
+    var fnPostJson = function (d) {
+        $.each(grid.postJson, function () {
+            if ($.isFunction(this)) this(d);
+        });
+    };
+
+
+    this.row = {};
+
 
     this.edit = function (r) {
-        this.row = r;
+        this.row = clone(r);
     }
+
+
+    this.onError = function (sMsg) {
+        alert(sMsg);
+    }
+
+    this.loadOnEnter = function (e) {
+        if (e.which == 13)
+            this.load();
+    }
+
+
+    this.getCheckedValues = function (Field_value, checkField, seprator) {
+
+        var seprator1 = seprator == undefined ? "," : seprator;
+        var lst = [];
+
+        for (var i = 0; i < this.rows.length; i++)
+            if (this.rows[i][   checkField])
+                lst.push(this.rows[i][Field_value]);
+
+        return lst.join(seprator1);
+    }
+
+
+
+    this.rows = [];
+    this.count = 0;
+    this.pageIndex = 0;
+    this.pageSize = "20";
+    this.pageButtons = [0, 1, 2, 3];
+
+
+
+    this.searchOnEnter = function (e) {
+
+        if (e.which == 13) {
+            this.pageIndex = 0;
+            this.load();
+        }
+
+    }
+
+    this.search = function (e) {
+        this.pageIndex = 0;
+        this.load();
+    }
+
+
+    this.ActiveClass = function (r) {
+        return r == this.pageIndex ? 'active1' : '';
+    }
+
+    this.getSortClass = function (sField) {
+
+        if (sField == this.sort_field) {
+            switch (this.sort_type) {
+                case "asc":
+                    return "fa-sort-alpha-asc";
+                case "desc":
+                    return "fa-sort-alpha-desc";
+                default:
+                    return "fa-sort"
+            }
+        }
+        else {
+            return "fa-sort"
+        }
+    }
+
+
+    //Sorting setting 
+    this.sort_type = ""
+    this.sort_field = ""
+
+    this.sort = function (sField, e) {
+        this.sort_field = sField;
+        this.sort_type = this.sort_type == "asc" ? "desc" : "asc";
+        this.load(null, e);
+    }
+    /////////////////
+
 
     this.getPageCount = function () {
         return Math.ceil(this.count / this.pageSize);
     }
 
+    this.changePage = function (iPageIndex, e) {
+        this.pageIndex = iPageIndex;
+        this.load(null, e);
+    }
+
+    this.MoveToFirstPage = function () {
+        this.pageButtons[0] = 0
+        this.pageButtons[1] = 1
+        this.pageButtons[2] = 2
+        this.pageButtons[3] = 3
 
 
-    this.fill = function(){
+        this.pageIndex = this.pageButtons[0];
+        this.load();
+
+
+    }
+
+    this.MoveToLastPage = function () {
+
+        while (this.pageButtons[3] <= this.getPageCount() - 1) {
+            this.pageButtons[0] += 4
+            this.pageButtons[1] += 4
+            this.pageButtons[2] += 4
+            this.pageButtons[3] += 4
+        }
+
+        this.pageIndex = this.pageButtons[0];
+        this.load();
+    }
+
+
+
+
+    this.MoveNext = function () {
+
+        if (this.pageButtons[3] >= this.getPageCount()) {
+            //alert(this.pageButtons[3] + ": " + this.getPageCount());
+            return;
+        }
+
+
+
+
+        this.pageButtons[0] += 4
+        this.pageButtons[1] += 4
+        this.pageButtons[2] += 4
+        this.pageButtons[3] += 4
+
+
+        this.pageIndex = this.pageButtons[0];
+        this.load();
+
+    }
+
+
+
+
+    this.MovePrevious = function () {
+        if (this.pageButtons[0] <= 0) return;
+
+        this.pageButtons[0] -= 4
+        this.pageButtons[1] -= 4
+        this.pageButtons[2] -= 4
+        this.pageButtons[3] -= 4
+        this.pageIndex = this.pageButtons[0];
+        this.load();
+    }
+
+    this.setButtons = function () {
+    }
+
+
+    this.load = function (callBack, e) {
+
+
+        var jnPost = {};
+
+
+        if (this.sort_type != "" && this.sort_field != "") {
+            jnPost["$sort"] = this.sort_field + " " + this.sort_type;
+        }
+
+
+        if (fnPostJson != undefined) fnPostJson(jnPost);
+
+        _beforeLoad();
+        grid.busy = true;
+
+        bll.execGrid(sGetPath, this.pageIndex, this.pageIndex * this.pageSize, this.pageSize, jnPost, function (data) {
+            
+            if(data.error == true)
+            {
+                grid.isError = true;
+                grid.errorMessage = data.error_msg;
+            }
+            else
+            {
+                grid.isError = false;
+                grid.errorMessage = "";
+
+                grid.rows = data.data;
+                grid.count = data.recordsTotal;
+            }
+            
+            
+            if ($.isFunction(callBack)) callBack();
+
+            _afterLoad();
+            grid.busy = false;
+            //this.setButtons();
+
+        }, e);
+    }
+
+
+    this.loadAll = function (dPostData, callBack, e) {
+
+
+        var jnPost = null;
+
+
+        if ($.isPlainObject(dPostData))
+            jnPost = dPostData;
+        else
+            if ($.isFunction(fnPostJson)) {
+                var jnPost = {};
+                fnPostJson(jnPost);
+            }
+
+
+        _beforeLoad();
+
+        bll.execJson(sGetPath, jnPost, function (data) {
+            if ($.isArray(data)) {
+                grid.rows = data;
+                grid.count = data.length;
+
+                if ($.isFunction(callBack)) callBack();
+
+                _afterLoad();
+            }
+        }, e);
+    }
+
+    this.selectById = function (iId, callback, e) {
+
+
+        if ($.isNumeric(iId) == false || parseInt(iId) == 0) {
+            this.row = {};
+            return;
+        }
+
+        var jnPost = {};
+        jnPost[this.PrimaryKeyField] = iId;
+
+        _beforeLoad();
+        bll.execJson(sGetPath, jnPost, function (data) {
+            if (data.length > 0) {
+                grid.row = data[0];
+                if ($.isFunction(callback)) callback();
+            }
+            _afterLoad();
+        }, e);
+    }
+
+
+    this.selectByFilter = function (filterData, callback, e) {
+        _beforeLoad();
+        grid.busy = true;
+        bll.execJson(sGetPath, filterData, function (data) {
+            if (data.length > 0) {
+                grid.row = data[0];
+                if ($.isFunction(callback)) callback();
+            }
+            _afterLoad();
+            grid.busy = false;
+        }, e);
+    }
+
+    //Alter
+    
+    this.downloadSQLReport = function(sReportName,sType,e){
+        var jnPost = {};
+        fnPostJson(jnPost);
+        bll.downloadSQLReport(sReportName, sType, jnPost, e);    
+        
+        //bll.downloadSQLReport("ap_mlm:customer_list", "Excel", $scope.row_filter, e);
+    }
+    
+    ///designed for VUE
+    
+    this.fill = function() {
         self = this;
-
         self.busy = true;
-        oConfig.getDataPaging(this.getPath,this.filterData,this.pageIndex,this.pageSize,function(res){
+        
+        bll.execGrid(this.getPath, this.pageIndex, this.pageIndex * this.pageSize, this.pageSize, this.filterData, function (res) {
+            
+            if (res.error == true)
+            {
+                self.isError = true;
+                self.errorMessage = res.error_msg;
+            }
+            else
+            {
+                self.isError = false;
+                self.errorMessage = "";
+
+                self.rows = res.data;
+                self.count = res.recordsTotal;
+            }
+        });
+        
+        /*
+        bll.getDataPaging(this.getPath,this.filterData,this.pageIndex,this.pageSize,function(res){
 
             if(res.error == true)
             {
@@ -404,8 +772,9 @@ function clsGrid (sPathGet,sPathSave,sPathDelete,sID) {
             self.busy = false;
 
         });
+        */
     }
-
+    
     this.setPage = function(iPageIndex) {
         debugger;
 
@@ -426,74 +795,85 @@ function clsGrid (sPathGet,sPathSave,sPathDelete,sID) {
         this.pageIndex = iPageIndex;
         this.fill();
     }
-
+    
     this.setPageSize = function(){
         this.pageIndex = 0;
         this.fill();
     }
-
-    this.moveNextPage = function(){
-        this.setPage(this.pageIndex + 1);
-    }
-
-    this.movePreviousPage = function(){
-        this.setPage(this.pageIndex - 1);
-    }
-
-    this.moveLastPage = function(){
-        this.setPage(this.getPageCount() - 1);
-    }
-
-    this.moveFirstPage  = function(){
-        this.setPage(0);
-    }
-
-    this.search = function(){
-        this.pageIndex = 0;
-        this.fill();
-    }
     
-    this.downloadSQLReport = function(sReportName,sType,e){
-        oConfig.downloadSQLReport(sReportName, sType, this.filterData, e);    
+}
+
+
+function ngCRUD(bll, sGetPath, sSavePath, sDeletePath, PrimaryKeyField) {
+
+    var grd = new ngGrid(bll, sGetPath);
+
+    grd.PrimaryKeyField = PrimaryKeyField;
+
+    grd.row_copy = null;
+
+    grd.formClear = function () {
+        grd.row = { id: 0 };
     }
-    
-    
-    //DML
 
-    this.formClear = function () {
-        this.row = { id : 0 };
+    grd.downloadFile = function (r, sField) {
+
+        /*
+        var iID = 0;
+        iID = r[grd.PrimaryKeyField];
+        var sPath = ng.getlinkDownloadFile(grd.ModuleName, sField, iID);
+        document.location.href = sPath;
+        */
     }
 
-    this.beforeSave = null;
+    grd.exec = function (row, sPath, e, callback) {
 
-    this.addBeforeSave = function (fn) {
+        if (grd.beforeSave != undefined) {
+            if (!grd.beforeSave()) return false;
+        }
+
+        r = row == undefined || row == null ? grd.row : row;
+
+        bll.UpdateModule( sPath, r, function (status, data) {
+            if (status == "success") {
+
+                //grd.formClear();
+
+                if (grd.afterSave != undefined && $.isFunction(grd.afterSave)) {
+                    //grd.afterSave(data);
+                }
+
+                if ($.isFunction(callback)) callback();
+            }
+        }, e);
+    }
+
+    grd.beforeSave = null;
+
+    grd.addBeforeSave = function (fn) {
         grd.beforeSave = fn;
     }
 
-    this.afterSave = null;
+    grd.afterSave = null;
 
-    this.addAfterSave = function (fn) {
-        this.afterSave = fn;
+    grd.addAfterSave = function (fn) {
+        grd.afterSave = fn;
     }
 
-    
-    this.save = function (callback, e) {
-        
-        var self = this;
+    grd.save = function (callback, e) {
 
-        if (this.beforeSave != undefined) {
-            if (!this.beforeSave()) return false;
+        if (grd.beforeSave != undefined) {
+            if (!grd.beforeSave()) return false;
         }
-		
-		
-        oConfig.UpdateModule(this.savePath, self.row, function (status, data, info) {
+
+        bll.UpdateModule(sSavePath, grd.row, function (status, data, info) {
 
             if (status == "success") {
 
-                self.formClear();
+                grd.formClear();
 
-                if (self.afterSave != undefined && $.isFunction(self.afterSave)) {
-                    self.afterSave(data, info);
+                if (grd.afterSave != undefined && $.isFunction(grd.afterSave)) {
+                    grd.afterSave(data, info);
                 }
 
                 if ($.isFunction(callback)) callback(data, info);
@@ -504,8 +884,291 @@ function clsGrid (sPathGet,sPathSave,sPathDelete,sID) {
             }
         }, e, false);
     }
+
+
+    //grd.save_others = function (callback, e) {
+    //    grd.exec(ActionName, e, callback);
+    //}
+
+    grd.edit = function (r) {
+        grd.row = clone(r);
+    }
+
+    grd.copy = function (r) {
+        grd.row_copy = r == undefined ? clone(grd.row) : clone(r);
+    }
+
+    grd.paste = function () {
+        grd.row = clone(grd.row_copy);
+        grd.row.id = 0;
+    }
+
+    
+    grd.del = function (r, callBack, e) {
+        if (!confirm("Are you sure want to delete selected record ?")) return;
+        bll.UpdateModule(sDeletePath, { id: r[PrimaryKeyField] }, function (status) {
+
+            if (status == "success") {
+                //if (callBack != undefined) grid.load();
+                grd.formClear();
+
+                if ($.isFunction(callBack)) {
+                    callBack();
+                }
+                else if (callBack == undefined) {
+                    grd.load();
+                }
+            }
+        }, e);
+    }
+
+
+    return grd;
 }
 
+//Before starting coding uncomment this code 
+//var oRequest = new clsRequest();
+
+function clsFileUploader(oRequest){
+    
+    this.rows = [];
+    
+    this.path_upload = "";
+    
+    this.process = {
+        runing : false 
+        ,totalCount : 0
+        ,doneCount : 0
+        ,errorCount : 0
+        ,currentFileName : ""
+    }
+    
+    this.addFiles = function(oFiles){
+        
+        this.rows = [];
+        for(var i =0; i < oFiles.length;i++){
+            var jn = {fileName : "",fileSize : 0 ,fileData : null }
+            
+            jn.fileName = oFiles[i].name;
+            jn.fileSize = Math.round(oFiles[i].size / 1024,-2);
+            jn.fileData = oFiles[i];
+            this.rows.push(jn);
+        }
+        
+        
+        this.process.totalCount = this.rows.length;
+        
+    }
+    
+    this.getPer = function()
+    {
+        return  Math.round(((this.process.doneCount + this.process.errorCount) / this.process.totalCount) * 100);
+    }
+
+    
+    this.addBeforePost = function(d){
+        
+    }
+    
+    
+    
+    this.uploadFile = function(r,e,callBack){
+        
+        debugger;
+        var this1 = this;
+        
+        var jnPost =  { "fileData" :  r['fileData']} ;
+        r.busy = true;
+        
+        this.process.currentFileName  = r.fileName;
+        if($.isFunction(this.addBeforePost)) this.addBeforePost(jnPost);
+        
+        oRequest.UpdateModule2(this1.path_upload,jnPost,function(status,error){
+            
+            if(status == "success") {
+                r.busy = false;
+                r.status = "Done"
+                r.done = true;
+                r.err = false;
+                
+                this1.process.doneCount++;
+            }
+            else
+            {
+                r.busy = false;
+                r.status = error;
+                r.done = false;
+                r.err = true;
+                
+                this1.process.errorCount++;
+            }
+            
+            if($.isFunction(callBack) == true){
+                callBack();
+            }
+        });
+        
+    }
+                         
+    
+    this.uploadFiles = function() {
+        var self = this;
+            
+        //var busy = false;
+        var stopInterval = undefined;
+        
+        var iRow = -1;
+        var busy  = false;
+        this.process.runing = true;
+
+        var _stopInterval = function(){
+            
+            clearInterval(stopInterval)
+            self.process.runing = false;
+            //alert("Operation done kinly check the log !");
+        }
+            
+        stopInterval = setInterval(function(){
+            
+            
+            if(iRow >= (self.rows.length -1)){
+                _stopInterval();     
+                busy = false;
+                return;
+            }
+                                 
+            if(busy == true) return;
+
+            if(iRow < self.rows.length){
+                iRow++;
+                busy = true;
+                self.uploadFile(self.rows[iRow],null,function(){
+                    busy = false;        
+                });
+            }
+            
+        },100);
+    }
+    
+}
+
+Vue.component("pager",function(resolve) {
+    getControlViewHtml("pager.html",function(sHtml,status){
+        if(status="success")
+        resolve({
+            template : sHtml
+
+            ,data : function(){
+                return { abc : "amit"};
+            }
+            ,props :{
+                grd : { type : Object   }
+            }
+
+        });
+    });
+});
+
+Vue.component("gridFilter",function(resolve) {
+    getControlViewHtml("grid-filter.html",function(sHtml,status){
+        if(status="success")
+        resolve({
+            template : sHtml
+            ,data : function(){
+                return { };
+            }
+            , props : {
+                grid : { type : Object }
+                ,filter : { type: Object , required : true   }
+            }
+        });
+    });
+});
+
+Vue.component("busy",{
+    props : { grd : Object }
+    ,template : "<div v-show='grd.busy' tyle='width:100%'><center><div class='busy-lg'></div></center></div>"
+});
+
+
+
+
+Vue.component("item1",function(resolve) {
+    getControlViewHtml("tree1.html",function(sHtml,status){
+        if(status="success")
+        resolve({
+            template : sHtml
+            ,  data: function () {
+                return {
+                  open: false
+                }
+            }
+            , props : {
+                model: Object
+            }
+            , computed: {
+                isFolder: function () {
+                  return this.model.children &&
+                    this.model.children.length
+                }
+            } 
+            , methods : {
+                toggle: function () {
+                  if (this.isFolder) {
+                    this.open = !this.open
+                  }
+                }
+                ,
+                changeType: function () {
+                  if (!this.isFolder) {
+                    Vue.set(this.model, 'children', [])
+                    this.addChild()
+                    this.open = true
+                  }
+                }
+                ,
+                addChild: function () {
+                  this.model.children.push({
+                    name: 'new stuff'
+                  })
+                }
+            }
+
+        });
+    });
+});
+
+Vue.component("bulkUploader", function (resolve) {
+    getControlViewHtml("bulk-uploader.html",function(resultHtml, status) { 
+        
+        resolve({
+            template: resultHtml
+            , props: {
+                uploadPath : String
+            }
+            , data: function () {
+                //debugger;
+                var oFiles = new clsFileUploader(oRequest)
+                oFiles.path_upload = this.uploadPath;
+                
+                return {
+                    oFiles : oFiles
+                }
+            }
+            , methods: {
+                fillFiles : function (e) {
+                    this.oFiles.addFiles(e.currentTarget.files);
+                }
+            }
+            , created: function () {
+                var self = this;
+                this.oFiles.addBeforePost = function (r) {
+                    self.$emit("onpost", r);
+                }
+            }
+        });
+    });
+});
 function clsFilterField(_grd){
 
     this.fields = [];
@@ -539,7 +1202,7 @@ function clsFilterField(_grd){
     }
 
     this.clear = function(){
-        this1.fields = [];
+        this1.fields=[];
     }
 
     /*
@@ -558,72 +1221,3 @@ function clsFilterField(_grd){
 
 }
 
-
-
-
-Vue.component("pager",function(resolve) {
-    getControlViewHtml("pager.html",function(sHtml,status){
-        if(status="success")
-        resolve({
-            template : sHtml
-
-            ,data : function(){
-                return { abc : "amit"};
-            }
-            ,props :{
-                grid : { type : Object   }
-            }
-
-        });
-    });
-});
-
-Vue.component("gridFilter",function(resolve) {
-    getControlViewHtml("grid-filter.html",function(sHtml,status){
-        if(status="success")
-        resolve({
-            template : sHtml
-            ,data : function(){
-                return { };
-            }
-            , props : {
-                grid : { type : Object }
-                ,filter : { type: Object , required : true   }
-            }
-        });
-    });
-});
-
-Vue.component("busy",{
-    props : { grd : Object }
-    ,template : "<div v-show='grd.busy' tyle='width:100%'><center><div class='busy-lg'></div></center></div>"
-});
-
-/*
-
-
-addVueControl("pager","pager.html",function(){
-    return {
-        data : function(){
-            return { abc : "amit"};
-        }
-        , props :{
-            grid : { type : Object   }
-        }
-
-    };
-});
-
-addVueControl("gridFilter","grid-filter.html",function(){
-    return {
-            data : function(){
-                return { };
-            }
-            , props : {
-                grid : { type : Object }
-                ,filter : { type: Object , required : true   }
-            }
-        };
-});
-
-*/

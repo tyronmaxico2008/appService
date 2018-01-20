@@ -1,4 +1,5 @@
 ///amit jha
+
 function clsAjaxProcessing(e) {
 
     var btn = undefined;
@@ -38,9 +39,6 @@ var g = {
 (function ($) {
     $.fn.serializeAny = function () {
         var ret = [];
-
-
-
         $.each($(this).find(':input'), function () {
 
             if (this.name != "") {
@@ -52,33 +50,14 @@ var g = {
         });
 
         return ret;
-    };
-
-    $.fn.validateFileSize = function (iSizeInMB) {
-        var blnValidate = true;
-        $.each(this, function () {
-            if (blnValidate == false) return;
-            if ($(this).attr("type") == "file" && this.files.length > 0) {
-                var sizeInMB = this.files[0].size / 1024 / 1024;
-
-
-                if (sizeInMB > iSizeInMB) {
-                    blnValidate = false;
-                    alert("The size of file [" + this.files[0].name + "] is " + sizeInMB.toFixed(2) + " MB, should not exceed more than " + Math.round(iSizeInMB) + " MB");
-                }
-            }
-        });
-        return blnValidate;
-    };
-
+    }
 })(jQuery);
 
 
 function postJn(sender) {
     var jn = [];
 
-    var f = {
-        name: ""
+    var f = { name: ""
         , value: ""
     };
 
@@ -86,7 +65,7 @@ function postJn(sender) {
     f.value = $(sender).val();
 
     jn.push(f);
-
+    
     return jn;
 
 }
@@ -253,11 +232,10 @@ function clsGrid(bll) {
     this.rows = [];
     this.filter = {};
     
-    
 }
 
 function clsAppConfig() {
-
+    
     this.appName = "";
     this.controllerLink = "";
     this.assetsLink = "";
@@ -278,194 +256,119 @@ function clsAppConfig() {
         sLink += "&start=" + start;
         return sLink;
     }
-    
 
     this.getUpdateLink = function (sPath) {
         return this.controllerLink + "UpdateModule?appName=" + this.appName + "&path=" + sPath;
     }
     
     this.getReportLink = function (sPath) {
-        return this.controllerLink + "setReport?appName=" + this.appName + "&path=" + sPath;
+        return this.controllerLink + "setReport?appName=" + this.appName + "&path=" + sPath;        
     }    
 
     this.getReportDownloadLink = function () {
         return this.controllerLink + "downloadSQLReport";
     }
-}
-var appBll = angular.module("appBll", []);
-appBll.factory("appConfig", new clsAppConfig());
-appBll.service("bll", function ($http, appConfig) {
+};
+
+function clsRequest($http,appConfig) {
+
     this.getData = function (sPath, callBack) {
-        //var sPathFull = "http://localhost:8086/Service/getdata?appName=mailroom&path=" + sPath;
         var sPathFull = appConfig.getDataLink(sPath);
-        
-        $http.get(sPathFull).success(function (data, status) {
-            callBack(data.Obj)
-        }).error(function (data, status) {
-        });
 
-    }
+        if($http)
+        {
+            $http.get(sPathFull).success(function (data, status) {
+                callBack(data.Obj)
+            }).error(function (data, status) {
+
+            });
+        }
+    };    
     
-    this.execGrid = function (sPath, pageSize, start, length, jnData, func, e) {
-        //alert(event.type);
-        
-        var oAjaxProcess = new clsAjaxProcessing(e);
-        oAjaxProcess.start();
+    this.submitForm =  function ( fields, uploadUrl, callback) {
 
-        var _url = appConfig.getDataPagingLink(sPath, pageSize, length, start);
+        var fd = new FormData();
+        
+        for (var f in fields) {
+            if (fields[f] != null && fields[f] != undefined)
+                fd.append(f, fields[f]);
+        }
+        
+        ///////////////////////////////////
+        
+        if($http)
+        {
+            
+            var _fnSuccess = function(res){
+                if (callback != undefined) callback(res.data,"success");
+            };
+            
+            var _fnError = function(){
+                if (callback != undefined) callback(null,"error");
+            };
+        
+            $http.post(uploadUrl, fd, {
+                transformRequest: angular.identity,
+                headers: { 'Content-Type': undefined }
+            }).then(_fnSuccess,_fnError);
+        }
+        else    
+        {
+            /*
+            $.post(uploadUrl,fields,function(data,status){
+                if(status == "success") 
+                    callback(data,"success");
+                else 
+                    callback(null,"error");
+            });
+            */
+            
+            request  = $.ajax({
+                url: uploadUrl,
+                contentType: false,
+                data: fd,
+                processData : false,
+                type: 'POST'
+            });
 
-        /*
-        var req = {
-            method: 'POST',
-            url: _url,
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            data: toparams(jnData)
-        };
-        */
-        
-        this.submitForm(jnData,_url,function (data){
-            func(data);
-            oAjaxProcess.end();
-        });
-        
-        /*
-        $http(req).success(function (data) {
-            func(data);
-            oAjaxProcess.end();
-        });
-        */
-    }
+            request.done(function(data){
+                callback(data,"success");
+            });
+
+            request.fail(function(error){
+                callback(null,"error");
+            });
+        }
+    };
     
-    /*
-    this.execGrid = function (sPath, pageSize, start, length, jnData, func, e) {
-        //alert(event.type);
-        var oAjaxProcess = new clsAjaxProcessing(e);
-        oAjaxProcess.start();
-
-        var _url = appConfig.getDataPagingLink(sPath, pageSize, length, start);
-
-        var req = {
-            method: 'POST',
-            url: _url,
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            data: toparams(jnData)
-        };
-        $http(req).success(function (data) {
-            func(data);
-            oAjaxProcess.end();
-        });
-    }
-    */
     
     this.execJson = function (sPath, jnData, func,e) {
-        //var _url = ng.getLink(sPath);
         var oAjaxProcess = new clsAjaxProcessing(e);
         oAjaxProcess.start();
 
         var _url = appConfig.getDataLink(sPath);
-        /*
-        var req = {
-            method: 'POST',
-            url: _url,
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            data: toparams(jnData)
-        };
-        */
-        
+
         this.submitForm(jnData,_url,function (data){
             func(data)
             oAjaxProcess.end();
         });
-        /*
-        $http(req).success(function (data) {
-            func(data);
-        });
-        */
     }
-    /*
-    this.submitForm =  function ( fields, uploadUrl, callback) {
-
-        var fd = new FormData();
-        for (var f in fields) {
-            if (fields[f] != null && fields[f] != undefined)
-                fd.append(f, fields[f]);
-        }
-
-        $http.post(uploadUrl, fd, {
-            transformRequest: angular.identity,
-            headers: { 'Content-Type': undefined }
-        }).success(function (data) {
-
-            if (callback != undefined) callback(data);
-        }).error(function (data, status, headers, config) {
-            // called asynchronously if an error occurs
-            // or server returns response with an error status.
-            if (callback != undefined) callback("Internal Server Error");
-        });
-    }
-
-    */
     
-    this.submitForm =  function ( fields, uploadUrl, callback) {
-
-        var fd = new FormData();
-        for (var f in fields) {
-            if (fields[f] != null && fields[f] != undefined)
-                fd.append(f, fields[f]);
-        }
-
-        var _fnSuccess = function(res){
-            if (callback != undefined) callback(res.data,"success");
-        }
-        var _fnError = function(){
-            if (callback != undefined) callback(null,"error");
-        };
-
-        $http.post(uploadUrl, fd, {
-            transformRequest: angular.identity,
-            headers: { 'Content-Type': undefined }
-        }).then(_fnSuccess,_fnError);
+    this.execGrid = function (sPath, pageSize, start, length, jnData, func, e) {
         
-        /*
-        $http.post(uploadUrl, fd, {
-            transformRequest: angular.identity,
-            headers: { 'Content-Type': undefined }
-        }).success(function (data) {
-            if (callback != undefined) callback(data,"success");
-            
-        }).error(function (data, status, headers, config) {
-            // called asynchronously if an error occurs
-            // or server returns response with an error status.
-            if (callback != undefined) callback(null,"error");
-        });
-        */
-    }
-
-    
-    this.UpdateModule =  function ( sPath, jnData, func, e) {
-            
-        var url = appConfig.getUpdateLink(sPath);
+        
         var oAjaxProcess = new clsAjaxProcessing(e);
-
         oAjaxProcess.start();
 
-        this.submitForm( jnData, url, function (data) {
-            var response = data['msg'];
-            var data1 = data['data'];
+        var _url = appConfig.getDataPagingLink(sPath, pageSize, length, start);
 
-            if (response != "") {
-                alert("Opps! "+ response);
-                if ($.isFunction(func)) func("error");
-            }
-            else {
-                //ShowMessage("success!", response);
-                if ($.isFunction(func)) func("success", data1);
-            }
+        this.submitForm(jnData,_url,function (data){
+            func(data);
             oAjaxProcess.end();
         });
     }
 
-    this.setSQLReport = function (sPath, jnData, func, e) {
+     this.setSQLReport = function (sPath, jnData, func, e) {
          var url = appConfig.getReportLink(sPath);
          var oAjaxProcess = new clsAjaxProcessing(e);
          
@@ -494,8 +397,62 @@ appBll.service("bll", function ($http, appConfig) {
         }, e);    
      }
      
+     this.UpdateModule =  function ( sPath, jnData, func, e) {
+            
+        var url = appConfig.getUpdateLink(sPath);
+        var oAjaxProcess = new clsAjaxProcessing(e);
+
+        oAjaxProcess.start();
+
+        this.submitForm( jnData, url, function (data) {
+            var response = data['msg'];
+            var data1 = data['data'];
+
+            if (response != "") {
+                alert("Opps! "+ response);
+                if ($.isFunction(func)) func("error");
+            }
+            else {
+                //ShowMessage("success!", response);
+                if ($.isFunction(func)) func("success", data1);
+            }
+            oAjaxProcess.end();
+        });
+    }
      
+    this.UpdateModule2 =  function ( sPath, jnData, func, e) {
+            
+        var url = appConfig.getUpdateLink(sPath);
+        var oAjaxProcess = new clsAjaxProcessing(e);
+
+        oAjaxProcess.start();
+
+        this.submitForm( jnData, url, function (data) {
+            var response = data['msg'];
+            var data1 = data['data'];
+
+            if (response != "") {
+                //alert("Opps! "+ response);
+                if ($.isFunction(func)) func("error",response);
+            }
+            else {
+                //ShowMessage("success!", response);
+                if ($.isFunction(func)) func("success", data1);
+            }
+            oAjaxProcess.end();
+        });
+    }
+
+
+}var appBll = angular.module("appBll", []);
+
+appBll.factory("appConfig", new clsAppConfig());
+
+appBll.factory("bll", function ($http, appConfig) {
+    var oRequest = new clsRequest($http,appConfig);
+    return oRequest;
 });
+
 
 
 function ngGrid(bll, sGetPath) {
@@ -525,6 +482,7 @@ function ngGrid(bll, sGetPath) {
     grid.addAfterLoad = function (fn) {
         grid.afterLoad.push(fn);
     }
+    
 
     grid.addPostJson = function (fn) {
         grid.postJson.push(fn);
@@ -776,7 +734,7 @@ function ngGrid(bll, sGetPath) {
         _beforeLoad();
 
         bll.execJson(sGetPath, jnPost, function (data) {
-            if (angular.isArray(data)) {
+            if ($.isArray(data)) {
                 grid.rows = data;
                 grid.count = data.length;
 
@@ -831,12 +789,81 @@ function ngGrid(bll, sGetPath) {
         
         //bll.downloadSQLReport("ap_mlm:customer_list", "Excel", $scope.row_filter, e);
     }
-
     
+    ///designed for VUE
+    
+    this.fill = function() {
+        self = this;
+        self.busy = true;
+        
+        bll.execGrid(this.getPath, this.pageIndex, this.pageIndex * this.pageSize, this.pageSize, this.filterData, function (res) {
+            
+            if (res.error == true)
+            {
+                self.isError = true;
+                self.errorMessage = res.error_msg;
+            }
+            else
+            {
+                self.isError = false;
+                self.errorMessage = "";
 
+                self.rows = res.data;
+                self.count = res.recordsTotal;
+            }
+        });
+        
+        /*
+        bll.getDataPaging(this.getPath,this.filterData,this.pageIndex,this.pageSize,function(res){
+
+            if(res.error == true)
+            {
+                self.isError = true;
+                self.errorMessage = res.error_msg;
+            }
+            else
+            {
+                self.isError = false;
+                self.errorMessage = "";
+
+                self.rows = res.data;
+                self.count = res.recordsTotal;
+            }
+
+            self.busy = false;
+
+        });
+        */
+    }
+    
+    this.setPage = function(iPageIndex) {
+        debugger;
+
+        //Control start 
+        if( (iPageIndex < 0) )
+        {
+           alert("You are on the first page !");
+            return ;
+        }
+        
+        if(iPageIndex >= this.getPageCount()){
+            alert("You are on the last page !");
+            return ;
+        }
+        
+        //Control end
+
+        this.pageIndex = iPageIndex;
+        this.fill();
+    }
+    
+    this.setPageSize = function(){
+        this.pageIndex = 0;
+        this.fill();
+    }
+    
 }
 
-//
 
 function ngCRUD(bll, sGetPath, sSavePath, sDeletePath, PrimaryKeyField) {
 
@@ -962,6 +989,18 @@ function ngCRUD(bll, sGetPath, sSavePath, sDeletePath, PrimaryKeyField) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 appBll.directive("pager", function (appConfig) {
     return {
         restrict: "E",
@@ -975,8 +1014,6 @@ appBll.directive("pager", function (appConfig) {
 });
 
 /*
-
-
 appBll.directive("pager", function (appConfig) {
 
     return {
@@ -988,9 +1025,6 @@ appBll.directive("pager", function (appConfig) {
         }
     }
 });
-
-
-
 */
 appBll.directive("sorter", function (appConfig) {
     return {
@@ -1139,7 +1173,6 @@ appBll.directive("drp", function (bll) {
 
     };
 });
-
 appBll.directive("fld", function (appConfig) {
     /*
     var sHtml = ""
@@ -1192,7 +1225,7 @@ appBll.directive("fld", function (appConfig) {
 });
 
 
-/*
+
 appBll.directive('fileModel', ['$parse', function ($parse) {
     return {
         restrict: 'A',
@@ -1209,43 +1242,6 @@ appBll.directive('fileModel', ['$parse', function ($parse) {
         }
     };
 }]);
-*/
-
-appBll.directive('fileModel', ['$parse', function ($parse) {
-    return {
-        restrict: 'A',
-        link: function (scope, element, attrs) {
-            var model = $parse(attrs.fileModel);
-            var modelSetter = model.assign;
-            debugger;
-            var iSize = (attrs.size || 2);
-
-            element.bind('change', function () {
-
-                if (element.validateFileSize(iSize) == true) {
-                    scope.$apply(function () {
-                        modelSetter(scope, element[0].files[0]);
-                    });
-                }
-                else
-                    element.val("");
-            });
-        }
-    };
-}]);
-﻿appBll.filter('shortDisplay', function () {
-    return function (input, length) {
-        var _length = 18;
-
-        if (length && angular.isNumber(length)) _length = length
-
-        if (typeof input == "string" && input.length > _length)
-            return input.substring(0, _length) + "...";
-        else
-            return input;
-    };
-});
-
 
 function getID() {
     return qstr("id");

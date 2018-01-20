@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appConfig>
   <applicationType>web</applicationType>
-  <applicationTitle>DMS Onboarding1</applicationTitle>
+  <applicationTitle>DMS Onboarding</applicationTitle>
 
   <!-- <defaultConnectionString type="mssql" name="main">Data Source=.;initial Catalog=dms;user id=sa;pwd=sa1983</defaultConnectionString>-->
   <appSettings>
@@ -12,10 +12,8 @@
 
   <packages>
     <!--
-    
     <package assemblyName="bll.common.dll" />
     <package assemblyName="bll.billingDemo.dll" />
-    
     -->
   </packages>
 
@@ -44,14 +42,10 @@
       <view>sysFormFields</view>
     </dt>
 
-
-    <dt name="mEmployee" type="other" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsCustomData"  func="getEmployee" />
-
-    <!--
-     <dt name="mEmployee" type="view">
-      <view>vmEmployee</view>
+    <dt name="mEmployee" type="view">
+      <view>mEmployee</view>
     </dt>
-    -->
+
     <dt name="mEmployee_Forms" type="view">
       <view>vmEmployee_Forms</view>
     </dt>
@@ -78,19 +72,17 @@
     <dt name="location" type="sql">
       <sql>select locationName,id from mLocation</sql>
     </dt>
+    
   </requestData>
 
   <requestData type="cmd">
-
     <cmd type="save" name="mEmployee\save2" crudName="mEmployee">
       <validations>
         <validate type="basic" fieldName="first_name" fieldTitle="First Name" maxLength="100" />
         <validate type="basic" fieldName="last_name" fieldTitle="Last Name" maxLength="100" />
         <validate type="unique" fieldName="email" fieldTitle="Email" primaryKey="id" tableName="mEmployee" />
-        <validate type="unique" fieldName="EmployeeID" fieldTitle="EmployeeID" primaryKey="id" tableName="mEmployee" />
       </validations>
     </cmd>
-    <cmd type="other" name="mEmployee\update_status" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsUpload" func="emp_update_status" />
 
     <cmd type="save" name="mLocation\save" crudName="mLocation">
       <validations>
@@ -100,33 +92,12 @@
     </cmd>
     <cmd type="delete" name="mLocation\delete" crudName="mLocation" />
 
-
-    <cmd type="save" name="sysForm\save" crudName="sysForm">
-      <validations>
-        <validate type="basic" fieldName="formName" fieldTitle="Form Name" maxLength="100" />
-        <validate type="unique" fieldName="formName" fieldTitle="Form Name" primaryKey="id" tableName="sysForm" />
-      </validations>
-    </cmd>
-    <cmd type="delete" name="sysForm\delete" crudName="sysForm" />
-
-    <cmd type="save" name="sysFormFields\save" crudName="sysFormFields">
-      <validations>
-        <validate type="basic"  fieldName="fieldName" fieldTitle="fieldName"    maxLength="100" />
-        <validate type="basic"  fieldName="fieldTitle" fieldTitle="fieldTitle"  maxLength="100" />
-        <validate type="check" fieldName="fieldType" fieldTitle="Field Type" values="Drp,File" maxLength="100"/>
-      </validations>
-    </cmd>
-    <cmd type="delete" name="sysFormFields\delete" crudName="sysFormFields" />
-
-
-
     <cmd type="other" name="mEmployee\upload_csv" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsBussinessLogic" func="upload_csv" />
     <cmd type="other" name="mEmployee\upload_doc" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsBussinessLogic" func="upload_doc" />
     <cmd type="other" name="candidate_login" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsBussinessLogic" func="candidate_login" />
     <cmd type="other" name="admin_login" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsBussinessLogic" func="admin_login" />
     <cmd type="other" name="mEmployee\finish" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsBussinessLogic" func="employee_finish" />
     <cmd type="other" name="mEmployee\updateFieldValue" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsBussinessLogic" func="employee_field_updateValue" />
-    <cmd type="other" name="ftp_upload" assemblyName="dms.bll" classPath="dms.onboarding.bll.clsBussinessLogic" func="ftp_upload" />
   </requestData>
 
   <requestData type="sqlreport">

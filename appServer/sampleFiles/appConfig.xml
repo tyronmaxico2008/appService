@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<appConfig>
+  <applicationTitle>DMS</applicationTitle>
+  <defaultConnectionString type="mssql" name="main">Data Source=.;initial Catalog=NokiaHRDMS;user id=sa;pwd=sa1983</defaultConnectionString>
+
+  <appSettings>
+    <appSetting key="applicationTitle" >Nokia  DMS</appSetting>
+    <appSetting key="dateFormat" >dd/MM/yyyy</appSetting>
+    <appSetting key="dateTimeFormat" >dd/MM/yyyy HH:MM ss</appSetting>
+
+    <appSetting key="MailUserID" >app_system</appSetting>
+    <appSetting key="MailPassword" >sys1@345</appSetting>
+    <appSetting key="MailHost" >mail.writercorporation.com</appSetting>
+    <appSetting key="MailPort">25</appSetting>
+    <appSetting key="FromMailID">system@writercorporation.com</appSetting>
+    <appSetting key="ImplantEmail" >amit.jha@writerinformation.com</appSetting>
+    <appSetting key="bgv_vendor_email">amit.jha@writerinformation.com;clover.shubhangip@writerinformation.com</appSetting>
+  </appSettings>
+
+  <cruds>
+    <crud name="emp" tableName="HR_EmployeeDetail" viewName="vHR_EmployeeDetail" primaryKey="id" isIdentity="true" />
+    <crud name="PFDetail" tableName="EmployeePFDetail" viewName="EmployeePFDetail" primaryKey="PFID" isIdentity="true" />
+    <crud name="EmployeeUploadDetails" tableName="EmployeeUploadDetails" viewName="EmployeeUploadDetails" primaryKey="id" isIdentity="true" />
+    <crud name="role" tableName="tbl_rolemaster" viewName="tbl_rolemaster" primaryKey="ROLE_ID" isIdentity="true" />
+    <crud name="usr" tableName="sys_user" viewName="vsys_user" primaryKey="User_ID" isIdentity="true" />
+    <crud name="Newhire" tableName="tbl_HireempInformation" viewName="tbl_HireempInformation" primaryKey="Njoin_id" isIdentity="true" />
+    <crud name="educationDetail" tableName="tbl_Empeducationdet" viewName="tbl_Empeducationdet" primaryKey="Edu_id" isIdentity="true" />
+    <crud name="workHistory" tableName="tbl_Previousempdetails" viewName="tbl_Previousempdetails" primaryKey="Pemp_id" isIdentity="true" />
+    <crud name="nomineedetail" tableName="tbl_NominationDeclaration" viewName="tbl_NominationDeclaration" primaryKey="Nominee_id" isIdentity="true" />
+    <crud name="familydetail" tableName="PartB_EPS" viewName="PartB_EPS" primaryKey="EPSID" isIdentity="true" />
+    <crud name="tbl_DocumentUpload" tableName="tbl_DocumentUpload" viewName="tbl_DocumentUpload" primaryKey="Doc_ID" isIdentity="true" />
+    <crud name="sysEmailTemplate" tableName="sysEmailTemplate" viewName="sysEmailTemplate" primaryKey="id" isIdentity="true" />
+    <crud name="sysWorkflowStatus" tableName="sysWorkflowStatus" viewName="sysWorkflowStatus" primaryKey="id" isIdentity="true" />
+    <crud name="sysWorkflowTrigger" tableName="sysWorkflowTrigger" viewName="vsysWorkflowTrigger" primaryKey="id" isIdentity="true" />
+  </cruds>
+
+  <requestData  type="getData">
+
+    <dt name="Nationality" type="view">
+      <view>tbl_Nationality</view>
+    </dt>
+    <dt name="branchOfStudy" type="view">
+      <view>tbl_BranchofStudy</view>
+    </dt>
+
+    <dt name="docUpload" type="view">
+      <view>vtbl_DocumentUpload</view>
+    </dt>
+    <dt name="Industry" type="view">
+      <view>tbl_Industry</view>
+    </dt>
+    <dt name="Certificate" type="view">
+      <view>tbl_Certificate</view>
+    </dt>
+    <dt name="EducationEstablishment" type="view">
+      <view>tbl_EducationEstablishment</view>
+      <orderby>Edu_id</orderby>
+    </dt>
+    <dt name="courses" type="view">
+      <view>vtbl_Course</view>
+    </dt>
+    <dt name="Country" type="view">
+      <view>tbl_countryMst</view>
+    </dt>
+
+    <dt name="familydetail" type="view">
+      <view>PartB_EPS</view>
+    </dt>
+
+    <dt name="nomineedetail" type="view">
+      <view>vtbl_NominationDeclaration</view>
+    </dt>
+
+    <dt name="educationDetail" type="view">
+      <view>tbl_Empeducationdet</view>
+      <orderby>Year(EndDate) DESC</orderby>
+    </dt>
+
+    <dt name="workHistory" type="view">
+      <view>tbl_Previousempdetails</view>
+      <orderby>Year(End_Date) DESC</orderby>
+    </dt>
+
+    <dt name="workHistory_current" type="other" assemblyName="HRDMS" classPath="bll.hrdms.clsEmployee_getCurrentEmployer" func="" ></dt>
+
+    <dt name="Newhire" type="view">
+      <view>tbl_HireempInformation</view>
+    </dt>
+    <dt name="Newhire\bucket" type="other" assemblyName="HRDMS" classPath="HRDMS.bll.clsGetData" func="getCandidateBucketList" ></dt>
+    <dt name="Newhire\bucket2" type="other" assemblyName="HRDMS" classPath="HRDMS.bll.clsGetData" func="getCandidateBucketList2" ></dt>
+    
+    <dt name="Newhire_bgv" type="view">
+      <view>vtbl_HireempInformation_bgv</view>
+    </dt>
+
+    <dt name="Newhire\bgvCommentLog" type="view">
+      <view>vtbl_HireempInformation_bgvCommentLog</view>
+      <orderby>updatedon DESC</orderby>
+    </dt>
+
+    <!--<dt name="workHistory_current" type="other" assemblyName="HRDMS" classPath="bll.hrdms.clsEmployee_getCurrentEmployer" func="" ></dt>-->
+
+    <dt name="sysModule" type="view">
+      <view>sysModule</view>
+    </dt>
+
+    <dt name="sysModuleOperations\selected" type="other" assemblyName="HRDMS" classPath="bll.hrdms.clsModuleOperationSelected"></dt>
+
+    <dt name="role" type="view">
+      <view>tbl_rolemaster</view>
+    </dt>
+    <dt name="usr" type="view">
+      <view>vsys_user</view>
+    </dt>
+    <dt name="emp" type="view">
+      <view>vHR_EmployeeDetail</view>
+    </dt>
+    <dt name="emp2" type="view">
+      <view>vHR_EmployeeDetail2</view>
+    </dt>
+    <dt name="PFDetail" type="view">
+      <view>EmployeePFDetail</view>
+    </dt>
+    <dt name="EmployeeUploadDetails" type="view">
+      <view>EmployeeUploadDetails</view>
+    </dt>
+    <dt name="test" type="other" assemblyName="HRDMS" classPath="bll.hrdms.clsEmp"></dt>
+
+    <dt name="candidate_uploadreport" type="other" assemblyName="HRDMS" classPath="HRDMS.bll.clsGetData" func="getCandidateUploadReport" ></dt>
+
+    <dt name="sysEmailTemplate" type="view">
+      <view>sysEmailTemplate</view>
+    </dt>
+
+    <dt name="fieldInfo" type="view">
+      <view>sysFieldInfo_detail</view>
+    </dt>
+    <dt name="sysWorkflowStatus" type="view">
+      <view>sysWorkflowStatus</view>
+      <orderby>statusIndex</orderby>
+    </dt>
+    <dt name="sysWorkflowTrigger" type="view">
+      <view>vsysWorkflowTrigger</view>
+    </dt>
+  </requestData>
+
+  <requestData  type="DropDown">
+    <dt name="item" type="sql">
+      <sql>select ItemName,mItemID from vmItem</sql>
+    </dt>
+  </requestData>
+
+  <requestData type="cmd">
+
+    <cmd type="save" name="emp\save" crudName="emp"  >
+      <validations>
+        <validate type="basic" fieldName="EmployeeCode" fieldTitle="Employee Code" maxLength="50"/>
+        <validate type="basic" fieldName="EmployeeName" fieldTitle="Employee Name" maxLength="50"/>
+        <validate type="basic" fieldName="Gender" fieldTitle="Gender" maxLength="1"/>
+      </validations>
+    </cmd>
+
+    <cmd type="cmd" name="Newhire\postpone_expiry">
+      <sql>update tbl_HireempInformation set Add_Date  = GETDATE() where NJoin_Id = @NJoin_ID</sql>
+      <validations>
+        <validate type="drp" fieldName="NJoin_ID" fieldTitle="NJoinID" />
+      </validations>
+    </cmd>
+
+    <cmd type="other" name="PFDetail\save2"  assemblyName="HRDMS" classPath="HRDMS.bll.clsCMD" func="save_PFDetail"  />
+    <cmd type="save" name="PFDetail\save" crudName="PFDetail"  >
+      <validations>
+        <!--<validate type="basic" fieldName="OraganizationName" fieldTitle="OraganizationName" maxLength="100"/>-->
+        <validate type="basic" fieldName="employmentType" fieldTitle="Employment Type" maxLength="100" />
+        <!-- <validate type="basic" fieldName="EPFACNo" fieldTitle="EPF Account No" maxLength="100"/>
+        <validate type="basic" fieldName="EPFMember" fieldTitle="EPF Member" maxLength="100"/>
+        <validate type="basic" fieldName="EPSMember" fieldTitle="EPS Member" maxLength="100"/>
+        <validate type="basic" fieldName="WithdrawStatus" fieldTitle="Withdraw Status" maxLength="100"/>-->
+      </validations>
+    </cmd>
+
+    <!--<cmd type="delete" name="PFDetail\delete" crudName="PFDetail"  />-->
+    <cmd type="delete" name="PFDetail\delete_basic" crudName="PFDetail"  />
+    <cmd type="other" name="PFDetail\delete"   assemblyName="HRDMS"  classPath="HRDMS.bll.clsCMD" func="PFDetail_Delete"  />
+
+    <cmd type="save" name="usr\save" crudName="usr" >
+      <validations>
+        <validate type="basic" fieldName="firstName" fieldTitle="First Name" maxLength="500"/>
+        <validate type="basic" fieldName="lastName" fieldTitle="Last Name" maxLength="500"/>
+        <validate type="basic" fieldName="Email" fieldTitle="Email" maxLength="500"/>
+        <validate type="basic" fieldName="GroupName" fieldTitle="Group Name" maxLength="200"/>
+        <validate type="basic" fieldName="UserName" fieldTitle="UserID" maxLength="200"/>
+        <validate type="basic" fieldName="USER_PASSWORD" fieldTitle="Password" maxLength="200"/>
+      </validations>
+    </cmd>
+    <cmd type="delete" name="usr\delete" crudName="usr"  />
+    <cmd type="other" name="usr\change_password" assemblyName="HRDMS" classPath="HRDMS.bll.clsCMD" func="user_changePassword" />
+
+    <cmd type="save" name="Newhire\save" crudName="Newhire" >
+      <validations>
+        <validate type="basic" fieldName="First_Name" fieldTitle="First Name" maxLength="200"/>
+        <validate type="basic" fieldName="Last_name" fieldTitle="Last Name" maxLength="200"/>
+
+        <validate type="basic" fieldName="Date_of_Birth" fieldTitle="Date of Birth" maxLength="200"/>
+        <validate type="basic" fieldName="Marital_status" fieldTitle="Marital status" maxLength="200"/>
+        <validate type="basic" fieldName="Fathers_Name" fieldTitle="Fathers Name" maxLength="200"/>
+        <validate type="basic" fieldName="pf_UAN" fieldTitle="Universal Account No." maxLength="200"/>
+        <validate type="basic" fieldName="Gender" fieldTitle="Gender" maxLength="200"/>
+        <!--<validate type="basic" fieldName="Income_Tax_PANno" fieldTitle="Income Tax Pan No" maxLength="200"/>-->
+        <validate type="basic" fieldName="Permanent_Address" fieldTitle="Permanent_Address" maxLength="500"/>
+        <validate type="basic" fieldName="Temp_Address" fieldTitle="Current_Address" maxLength="500"/>
+        <validate type="basic" fieldName="Nationality" fieldTitle="Nationality" maxLength="200"/>
+        <!--<validate type="basic" fieldName="nameOnPanCard" fieldTitle="Name On Pan Card" maxLength="100"/>-->
+        <validate type="basic" fieldName="nameOnAdharCard" fieldTitle="Name On Adhar Card" maxLength="100"/>
+        <validate type="unique" fieldName="Personal_email" fieldTitle="Personal Email" maxLength="500" tableName="tbl_HireempInformation" primaryKey="Njoin_id" />
+      </validations>
+    </cmd>
+
+    <cmd type="save" name="Newhire\changeName" crudName="Newhire" >
+      <validate type="basic" fieldName="First_Name" fieldTitle="First Name" maxLength="200"/>
+      <validate type="basic" fieldName="Last_name" fieldTitle="Last Name" maxLength="200"/>
+      <validate type="unique" fieldName="Personal_email" fieldTitle="Personal Email" maxLength="500" tableName="tbl_HireempInformation" primaryKey="Njoin_id" />
+    </cmd>
+
+    <cmd type="other" name="Newhire\save3"  assemblyName="HRDMS" classPath="HRDMS.bll.clsCMD" func="save_emp"  />
+    <cmd type="other" name="Newhire\validatePersonalInfo"  assemblyName="HRDMS" classPath="HRDMS.bll.clsCMD" func="validatePersonalInformation"  />
+    <cmd type="other" name="Newhire\change_password" assemblyName="HRDMS" classPath="HRDMS.bll.clsCMD" func="emp_changePassword" >
+      <validations>
+        <validate type="basic" fieldName="old_password" fieldTitle="old Password" maxLength="200"/>
+        <validate type="basic" fieldName="new_password" fieldTitle="New Password" maxLength="200"/>
+        <validate type="basic" fieldName="confirm_password" fieldTitle="Confirm Password" maxLength="200"/>
+      </validations>
+    </cmd>
+    <cmd type="save" name="Newhire\save2" crudName="Newhire" >
+      <validations>
+        <validate type="basic" fieldName="First_Name" fieldTitle="First Name" maxLength="200"/>
+        <validate type="unique" fieldName="Personal_email" fieldTitle="Personal Email" maxLength="500" tableName="tbl_HireempInformation" primaryKey="Njoin_id" />
+      </validations>
+    </cmd>
+
+    <cmd type="other" name="Newhire\BGVDone" assemblyName="HRDMS" classPath="HRDMS.bll.clsCMD" func="bgvDone">
+      <validations>
+        <validate type="drp" fieldName="NJoin_ID" fieldTitle="NJoinID" />
+        <validate type="basic" fieldName="comments" fieldTitle="Comments" maxlength="500" />
+      </validations>
+    </cmd>
+
+    <cmd type="json" name="Newhire\update_status1">
+      <sql>update tbl_HireempInformation set current_status = @current_status where NJoin_Id = @NJoin_ID</sql>
+      <validations>
+        <validate type="drp" fieldName="NJoin_ID" fieldTitle="NJoinID" />
+        <validate type="basic" fieldName="current_status" fieldTitle="Current Status" />
+      </validations>
+    </cmd>
+
+    <cmd type="other" name="Newhire\completed" assemblyName="HRDMS" classPath="HRDMS.bll.clsCMD" func="candidate_allInfoUpdated" >
+      <validations>
+        <validate type="drp" fieldName="NJoin_ID" fieldTitle="NJoinID" />
+      </validations>
+    </cmd>
+
+    <cmd type="json" name="Newhire\sendToDMS">
+      <sql>
+        update tbl_HireempInformation
+        set current_status = 'Send to DMS'
+        , DMS_Moveon =getdate()
+        , Nokia_ID = @Nokia_ID, Requestion_No = @Requestion_No
+        , Case_Id = @Case_Id
+        where Njoin_id = @Njoin_id
+
+        exec USP_UpdateDmsdata @Njoin_id, @Nokia_ID,@Requestion_No,@Case_ID
+      </sql>
+      <validations>
+        <validate type="drp" fieldName="Njoin_ID" fieldTitle="NJoinID" />
+        <validate type="basic" fieldName="Nokia_ID" fieldTitle="Nokia ID" maxLength="50"/>
+        <validate type="basic" fieldName="Requestion_No" fieldTitle="Requestion No" maxLength="50"/>
+        <validate type="basic" fieldName="Case_id" fieldTitle="Case id" maxLength="50" />
+      </validations>
+    </cmd>
+
+    <cmd type="cmd" name="Newhire\addToBucket">
+      <sql>exec tbl_hireempinformation_addToBucket @NJoin_ID</sql>
+      <validations>
+        <validate type="drp" fieldName="Njoin_ID" fieldTitle="NJoinID" />
+      </validations>
+    </cmd>
+
+    <cmd type="cmd" name="Newhire\removeFromBucket">
+      <sql>delete from tbl_hireempinformation_bucket  where NJoin_id = @NJoin_ID</sql>
+      <validations>
+        <validate type="drp" fieldName="Njoin_ID" fieldTitle="NJoinID" />
+      </validations>
+    </cmd>
+
+    <cmd type="cmd" name="Newhire\update_doj">
+      <sql>exec tbl_hireempinformation_update_doj  @doj, @NJoin_id, @Nokia_ID</sql>
+      <validations>
+        <validate type="drp" fieldName="Njoin_ID" fieldTitle="NJoinID" />
+        <validate type="basic" fieldName="DOJ" fieldTitle="Date of Joining"  />
+        <validate type="basic" fieldName="Nokia_ID" fieldTitle="Nokia ID"  />
+        <validate type="unique" fieldName="Nokia_ID" fieldTitle="Nokia ID" maxLength="500" tableName="tbl_HireempInformation" primaryKey="Njoin_id" />
+      </validations>
+    </cmd>
+
+    <!--<cmd type="cmd" name="Newhire\sendToDMS">
+      <sql>update tbl_HireempInformation set current_status = 'Send to DMS', bgv_updatedOn = getDate() where NJoin_Id = @NJoin_ID</sql>
+      <validations>
+        <validate type="drp" fieldName="NJoin_ID" fieldTitle="NJoinID" />
+      </validations>
+    </cmd>-->
+
+
+
+    <cmd type="delete" name="Newhire\delete" crudName="Newhire"  />
+    <cmd type="other" name="Newhire\update_status"  assemblyName="HRDMS" classPath="HRDMS.bll.clsUpdateEmpStatus"   />
+    <cmd type="other" name="Newhire\moveToBGV"  assemblyName="HRDMS" classPath="HRDMS.bll.clsUpdateEmpStatus"  func="MoveToBGV"  />
+    <cmd type="other" name="Newhire\uploadSingedDoc"  assemblyName="HRDMS" classPath="HRDMS.bll.clsEmployee_UploadSignature"  />
+    <cmd type="other" name="Newhire\uploadBGVDocs"  assemblyName="HRDMS" classPath="HRDMS.bll.clsEmployee_UploadBGVDocs"  />
+
+    <!--<cmd type="other" name="educationDetail\save2"   assemblyName="HRDMS"  classPath="HRDMS.bll.clsEducationDetail_Save" />-->
+    <cmd type="other" name="educationDetail\save2"   assemblyName="HRDMS"  classPath="HRDMS.bll.clsCMD" func="save_uploadDoc_education" />
+
+    <cmd type="save" name="educationDetail\save" crudName="educationDetail" >
+      <validations>
+        <validate type="basic" fieldName="institute" fieldTitle="Board/University/College/Institute" maxLength="200"/>
+        <validate type="basic" fieldName="Institute_Location" fieldTitle="Location" maxLength="500"/>
+        <validate type="basic" fieldName="college_adddress" fieldTitle="College Adddress" maxLength="100"/>
+
+        <validate type="basic" fieldName="OraganizationName" fieldTitle="Education Establishment" maxLength="500"/>
+
+        <validate type="basic" fieldName="course_attend_type" fieldTitle="Course Attended" maxLength="100"/>
+        <validate type="basic" fieldName="Country" fieldTitle="Country" maxLength="200"/>
+        <validate type="basic" fieldName="Certificate" fieldTitle="Certificate" maxLength="500"/>
+        <validate type="basic" fieldName="BranchOfStudy" fieldTitle="Branch Of Study" maxLength="500"/>
+        <validate type="basic" fieldName="courseName" fieldTitle="Qualification Type" maxLength="200"/>
+        <validate type="basic" fieldName="MajorSubject" fieldTitle="Major Subject" maxLength="500"/>
+        <validate type="basic" fieldName="MinorSubject" fieldTitle="Minor Subject" maxLength="500"/>
+        <validate type="basic" fieldName="roll_number" fieldTitle="Roll Number/ Registration Number / Exam Seat Number" maxLength="100"/>
+        <validate type="basic" fieldName="StartDate" fieldTitle="Start Date" />
+        <validate type="basic" fieldName="EndDate" fieldTitle="End Date" />
+        <validate type="numeric" fieldName="Scored_Grad" fieldTitle="Scored Grad" />
+      </validations>
+    </cmd>
+
+    <cmd type="delete" name="educationDetail\delete_basic" crudName="educationDetail"  />
+    <cmd type="other"  name="educationDetail\delete"   assemblyName="HRDMS"  classPath="HRDMS.bll.clsCMD" func="educationDetail_delete"  />
+
+    <!-- <cmd type="other" name="workHistory\save2"   assemblyName="HRDMS"  classPath="HRDMS.bll.clsWorkHistory_Save" /> -->
+
+    <cmd type="other" name="workHistory\save2"   assemblyName="HRDMS"  classPath="HRDMS.bll.clsCMD" func="save_uploadDoc_experience"  />
+    <cmd type="save" name="workHistory\save_for_fresher" crudName="workHistory" />
+    <cmd type="save" name="workHistory\save" crudName="workHistory" >
+      <validations>
+        <validate type="basic" fieldName="employment_type" fieldTitle="employment type" maxLength="500"/>
+        <validate type="basic" fieldName="outsourcingAgency_name" fieldTitle="outsourcing Agency name" maxLength="500"/>
+        <validate type="basic" fieldName="outsourcingAgency_address" fieldTitle="outsourcingAgency_address" maxLength="500"/>
+        <validate type="basic" fieldName="outsourcingAgency_tel" fieldTitle="outsourcing Agency cont. no." maxLength="500"/>
+        <validate type="basic" fieldName="Employer_org_name" fieldTitle="Oraganization Name" maxLength="500"/>
+
+        <validate type="basic" fieldName="Designation" fieldTitle="Designation" maxLength="500"/>
+        <validate type="basic" fieldName="Industry" fieldTitle="Industry" maxLength="500"/>
+        <validate type="basic" fieldName="City" fieldTitle="City" maxLength="500"/>
+        <validate type="basic" fieldName="Country" fieldTitle="Country" maxLength="500"/>
+        <validate type="basic" fieldName="Start_Date" fieldTitle="Start Date" maxLength="500"/>
+        <validate type="basic" fieldName="End_Date" fieldTitle="End Date" maxLength="500"/>
+
+        <validate type="basic" fieldName="supervisor_Name" fieldTitle="Supervisor Name" maxLength="500"/>
+        <validate type="basic" fieldName="supervisor_title" fieldTitle="Supervisor title" maxLength="500"/>
+        <validate type="basic" fieldName="supervisor_phoneNo" fieldTitle="Supervisor phoneNo" maxLength="500"/>
+        <validate type="email" fieldName="supervisor_email" fieldTitle="Supervisor email" maxLength="500" required="true"/>
+        <validate type="basic" fieldName="hrmanager_name" fieldTitle="HR Manager Name" maxLength="500"/>
+        <validate type="basic" fieldName="hrmanager_phoneNo" fieldTitle="HR Manager PhoneNo" maxLength="500"/>
+
+        <validate type="email" fieldName="hrmanager_email" fieldTitle="HR Manager Email" maxLength="500" required="true" />
+        <validate type="basic" fieldName="employment_type" fieldTitle="Employment type" maxLength="500"/>
+        <validate type="basic" fieldName="outsourcingAgency_name" fieldTitle="Outsourcing Agency Name" maxLength="500"/>
+        <validate type="basic" fieldName="outsourcingAgency_address" fieldTitle="OutsourcingAgency Address" maxLength="500"/>
+        <validate type="basic" fieldName="outsourcingAgency_tel" fieldTitle="OutsourcingAgency Tel" maxLength="500"/>
+      </validations>
+    </cmd>
+
+    <!-- 
+    <cmd type="delete" name="workHistory\delete" crudName="workHistory"  />
+    <cmd type="delete" name="workHistory\delete" crudName="workHistory"  />
+    -->
+    <cmd type="delete" name="workHistory\delete_basic" crudName="workHistory"  />
+    <cmd type="other" name="workHistory\delete"   assemblyName="HRDMS"  classPath="HRDMS.bll.clsCMD" func="workHistory_delete"  />
+
+
+
+    <cmd type="other" name="nomineedetail\save"   assemblyName="HRDMS"  classPath="HRDMS.bll.clsCMD" func="save_nominee_declaration"  />
+    <cmd type="save" name="nomineedetail\save_basic" crudName="nomineedetail" >
+      <validations>
+        <validate type="basic" fieldName="Nominee_name" fieldTitle="Nominee Name" maxLength="500"/>
+        <validate type="basic" fieldName="Nominee_Address" fieldTitle="Nominee Address" maxLength="500"/>
+        <validate type="basic" fieldName="Nominee_relationship" fieldTitle="Nominee Relationship" maxLength="500"/>
+        <validate type="basic" fieldName="DateofBirth" fieldTitle="Date of Birth" maxLength="500"/>
+        <validate type="basic" fieldName="share_percentage" fieldTitle="share percentage" maxLength="500"/>
+      </validations>
+    </cmd>
+
+    <cmd type="delete" name="nomineedetail\delete_basic" crudName="nomineedetail"  />
+    <cmd type="other" name="nomineedetail\delete"   assemblyName="HRDMS"  classPath="HRDMS.bll.clsCMD" func="nomineeDetail_delete"  />
+
+    <cmd type="other" name="familydetail\save"   assemblyName="HRDMS"  classPath="HRDMS.bll.clsCMD" func="save_familyDetail"  />
+    <cmd type="save" name="familydetail\save_basic" crudName="familydetail" >
+      <validations>
+        <validate type="basic" fieldName="memberName" fieldTitle="Member Name" maxLength="500" />
+        <validate type="basic" fieldName="Relation" fieldTitle="Member Relation" maxLength="200" />
+      </validations>
+    </cmd>
+    <cmd type="delete" name="familydetail\delete_basic" crudName="familydetail"  />
+    <cmd type="other" name="familydetail\delete"   assemblyName="HRDMS"  classPath="HRDMS.bll.clsCMD" func="familydetail_delete"  />
+
+
+
+    <cmd type="save" name="role\save" crudName="role"  >
+      <!--<validations>
+        <validate type="basic" fieldName="OraganizationName" fieldTitle="OraganizationName" maxLength="100"/>
+        <validate type="basic" fieldName="EPFACNo" fieldTitle="EPF Account No" maxLength="100"/>
+      </validations>-->
+    </cmd>
+    <cmd type="delete" name="role\delete" crudName="role"  />
+
+    <cmd type="other" name="RoleModuleOperation\save"  assemblyName="HRDMS" classPath="bll.hrdms.clsModuleOperationSave"  />
+
+    <cmd type="save" name="EmployeeUploadDetails\save" crudName="EmployeeUploadDetails" />
+    <cmd type="delete" name="EmployeeUploadDetails\delete" crudName="EmployeeUploadDetails"  />
+
+    <cmd type="save" name="emp\save2" crudName="emp" >
+      <validations>
+        <validate type="basic" fieldName="EmployeeCode" fieldTitle="Employee Code" maxLength="50"/>
+        <validate type="basic" fieldName="EmployeeName" fieldTitle="Employee Name" maxLength="50"/>
+        <validate type="basic" fieldName="PersonalEmail" fieldTitle="Email" maxLength="500"/>
+      </validations>
+    </cmd>
+
+    <cmd type="delete" name="sysEmailTemplate\delete" crudName="sysEmailTemplate"  />
+    <cmd type="save" name="sysEmailTemplate\save" crudName="sysEmailTemplate" >
+      <validations>
+        <validate type="basic" fieldName="template_name" fieldTitle="Template Name" maxLength="100"/>
+        <validate type="basic" fieldName="sub" fieldTitle="Subject" maxLength="3000"/>
+        <validate type="basic" fieldName="to_email" fieldTitle="To Email" maxLength="2000"/>
+      </validations>
+    </cmd>
+
+    <cmd type="delete" name="sysWorkflowStatus\delete" crudName="sysWorkflowStatus"  />
+    <cmd type="save" name="sysWorkflowStatus\save" crudName="sysWorkflowStatus" >
+      <validations>
+        <validate type="basic" fieldName="statusCode" fieldTitle="Status Code" maxLength="100"/>
+        <validate type="basic" fieldName="statusTitle" fieldTitle="Status Title" maxLength="100"/>
+        <validate type="basic" fieldName="statusColor" fieldTitle="Status Color" maxLength="100"/>
+        <validate type="numeric" fieldName="statusIndex" fieldTitle="Status Index" />
+      </validations>
+    </cmd>
+
+    <cmd type="delete" name="sysWorkflowTrigger\delete" crudName="sysWorkflowTrigger"  />
+    <cmd type="save" name="sysWorkflowTrigger\save" crudName="sysWorkflowTrigger" >
+      <validations>
+        <validate type="basic" fieldName="trigger_name" fieldTitle="Trigger Name " maxLength="100"/>
+        <validate type="basic" fieldName="trigger_type" fieldTitle="Trigger Type" maxLength="100"/>
+        <validate type="check" fieldName="trigger_type" fieldTitle="Trigger Type" values="Email,Unknown" />
+        <!--<validate type="basic" fieldName="date_field" fieldTitle="Date Field" maxLength="100"/>-->
+        <validate type="check" fieldName="date_execution_type" fieldTitle="Date Execution type" values="After,Before,On" maxLength="100"/>
+        <validate type="numeric" fieldName="statusIndex" fieldTitle="Status Index" />
+      </validations>
+    </cmd>
+
+    <cmd type="other" name="emp\upload"  assemblyName="HRDMS" classPath="HRDMS.bll.clsUpload"  />
+    <cmd type="other" name="emp\uploaddoc"  assemblyName="HRDMS" classPath="HRDMS.bll.clsUploadDoc"  />
+    <cmd type="other" name="emp\update_status"  assemblyName="HRDMS" classPath="HRDMS.bll.clsUpdateEmpStatus"  />
+
+    <!-- Employee Login -->
+    <cmd type="other" name="system\login3"  assemblyName="HRDMS" classPath="HRDMS.bll.clsLogin3"  >
+      <validations>
+        <validate type="basic" fieldName="userid" fieldTitle="User ID" maxLength="200"/>
+        <validate type="basic" fieldName="pwd" fieldTitle="Password" maxLength="200"/>
+      </validations>
+    </cmd>
+
+    <cmd type="other" name="system\login"  assemblyName="HRDMS" classPath="HRDMS.bll.clsLogin"  >
+      <validations>
+        <validate type="basic" fieldName="userid" fieldTitle="User ID" maxLength="200"/>
+        <validate type="basic" fieldName="pwd" fieldTitle="Password" maxLength="200"/>
+      </validations>
+    </cmd>
+  </requestData>
+
+  <requestData type="sqlreport">
+    <sqlreport name="nominee" rdlPath="\nominee.rdl" >
+      <downloadName>NominationForm_1098_1105</downloadName>
+      <ds name="DataSet1" type="sql">select * from tbl_HireempInformation where Njoin_id = @Njoin_id</ds>
+      <ds name="Nominee" type="sql">select * from tbl_NominationDeclaration where Njoin_id = @Njoin_id</ds>
+      <ds name="EPSPartB" type="sql">select * from PartB_EPS where Njoin_id = @Njoin_id and Type='EPSPart1' </ds>
+      <ds name="EPBSPartB1" type="sql">select * from  PartB_EPS where Njoin_id = @Njoin_id and Type='EPSPart2' </ds>
+    </sqlreport>
+
+    <sqlreport name="gratuity" rdlPath="\Gratuity.rdl" >
+      <downloadName>GratuityForm_1098_1104</downloadName>
+      <ds name="NomineeDet" type="sql">select * from tbl_NominationDeclaration where Njoin_id = @Njoin_id</ds>
+      <ds name="JoineeDet" type="sql">select * from tbl_HireempInformation where Njoin_id = @Njoin_id</ds>
+    </sqlreport>
+
+    <sqlreport name="bgv" rdlPath="\bgv.rdl">
+      <downloadName>BGVFile_1099_1106</downloadName>
+      <ds name="emp" type="sql">select * from tbl_HireempInformation where Njoin_id = @Njoin_id</ds>
+      <ds name="WorkHistory" type="sql">select * from tbl_Previousempdetails where Njoin_id = @Njoin_id</ds>
+      <ds name="educationDetail" type="sql">select * from tbl_Empeducationdet where Njoin_id = @Njoin_id</ds>
+    </sqlreport>
+
+    <sqlreport name="bgv_auth" rdlPath="\bgv_auth.rdl">
+      <downloadName>BGVAuthFile_1099_1106</downloadName>
+      <ds name="emp" type="sql">select * from tbl_HireempInformation where Njoin_id = @Njoin_id</ds>
+    </sqlreport>
+
+    <sqlreport name="form11" rdlPath="\form11.rdl">
+      <downloadName>Form_11</downloadName>
+      <ds name="emp" type="sql">select * from tbl_HireempInformation where Njoin_id = @Njoin_id</ds>
+      <ds name="PFDetail" type="sql">select * from EmployeePFDetail where Njoin_id = @Njoin_id</ds>
+    </sqlreport>
+
+    <sqlreport name="newhireinformation" rdlPath="\EmpDetailsReport.rdlc">
+      <downloadName>NewHIREFORM_1098_1102</downloadName>
+      <!--<ds name="Employee" type="sql">select * from tbl_HireempInformation where Njoin_id = @Njoin_id</ds>-->
+      <ds name="DsEmp" type="sql">select * from tbl_HireempInformation where Njoin_id = @Njoin_id</ds>
+      <ds name="DsEdu" type="sql">select * from tbl_Empeducationdet where Njoin_id = @Njoin_id</ds>
+      <ds name="DsExp" type="sql">select * from tbl_Previousempdetails where Njoin_id = @Njoin_id</ds>
+    </sqlreport>
+
+    <sqlreport name="ABCD" rdlPath="\EmployeeUploadList.rdl">
+      <downloadName>ABC</downloadName>
+      <!--<ds name="Employee" type="sql">select * from tbl_HireempInformation where Njoin_id = @Njoin_id</ds>-->
+      <ds name="DataSet1" type="sql">select * from vCandidate_uploadReport2 </ds>
+
+    </sqlreport>
+
+    <sqlreport name="employeelistbycurrentstutus" rdlPath="\EmployeeListByStatus.rdl">
+      <downloadName>EmpStatus</downloadName>
+      <!--<ds name="Employee" type="sql">select * from tbl_HireempInformation where Njoin_id = @Njoin_id</ds>-->
+      <ds name="DataSet1" type="sql">select * from tbl_HireempInformation </ds>
+    </sqlreport>
+  </requestData>
+</appConfig>

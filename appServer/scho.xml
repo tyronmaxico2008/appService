@@ -1,12 +1,11 @@
 <!--<?xml version="1.0" encoding="utf-8"?>-->
 <appConfig>
 
-  <defaultConnectionString type="mssql" name="main">Data Source=.;initial Catalog=dms_onboarding;user id=sa;pwd=sa1983</defaultConnectionString>
+  <defaultConnectionString type="mssql" name="main">Data Source=.;initial Catalog=scho;user id=sa;pwd=sa1983</defaultConnectionString>
   <appSettings>
     <appSetting key="firstName">Amit</appSetting>
     <appSetting key="lastName">Jha</appSetting>
-    <appSetting key="docPath">D:\current\project_data\dms.onboarding\EmployeePDFData</appSetting>
-    <appSetting key="ftp_folder">D:\current\project_data\dms.onboarding\ftp</appSetting>
+    <appSetting key="docPath">D:\current\project_data\scho</appSetting>
   </appSettings>
 
   <cruds>
